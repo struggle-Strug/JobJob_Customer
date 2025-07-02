@@ -5,7 +5,7 @@ import { Row, Col, Input, Select, message } from "antd";
 import { Link } from "react-router-dom";
 import { Prefectures } from "../../../utils/constants/categories/prefectures.js";
 import { Municipalities } from "../../../utils/constants/categories/municipalities.js";
-import { useAuth } from "../../../context/AuthContext.jsx.js";
+import { useAuth } from "../../../context/AuthContext.jsx";
 import axios from "axios";
 import { useEffect } from "react";
 import { Helmet } from "react-helmet";
