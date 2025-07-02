@@ -5,7 +5,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import FacilityDetail from "./FacilityDetail";
-import { useAuth } from "../../../context/AuthContext";
+import { useAuth } from "../../../context/AuthContext.jsx";
 import { PlusCircleOutlined } from "@ant-design/icons";
 import { Helmet } from "react-helmet";
 
@@ -25,7 +25,7 @@ const FacilityPage = () => {
     try {
       setLoading(true);
       const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/api/v1/facility/customer`
+        `${import.meta.env.VITE_APP_API_URL}/api/v1/facility/customer`
       );
 
       if (response.data.error) {
@@ -67,7 +67,7 @@ const FacilityPage = () => {
       try {
         setLoadingDetail(true);
         const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/api/v1/jobpost/facility/${id}`
+          `${import.meta.env.VITE_APP_API_URL}/api/v1/jobpost/facility/${id}`
         );
 
         if (response.data.error) {
@@ -101,7 +101,7 @@ const FacilityPage = () => {
       try {
         setLoadingDetail(true);
         const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/api/v1/facility/${id}`
+          `${import.meta.env.VITE_APP_API_URL}/api/v1/facility/${id}`
         );
 
         if (response.data.error) {

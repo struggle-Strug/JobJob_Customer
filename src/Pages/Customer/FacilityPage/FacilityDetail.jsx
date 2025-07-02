@@ -92,7 +92,7 @@ const FacilityDetail = ({ facility, jobPosts, setJobPosts }) => {
     try {
       setLoading((prev) => ({ ...prev, facilities: true }));
       const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/api/v1/facility/getByCompany`
+        `${import.meta.env.VITE_APP_API_URL}/api/v1/facility/getByCompany`
       );
 
       if (response.data.error) {
@@ -116,7 +116,9 @@ const FacilityDetail = ({ facility, jobPosts, setJobPosts }) => {
     try {
       setLoading((prev) => ({ ...prev, jobPosts: true }));
       const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/api/v1/jobpost/facility/${facilityId}`
+        `${
+          import.meta.env.VITE_APP_API_URL
+        }/api/v1/jobpost/facility/${facilityId}`
       );
 
       if (response.data.error) {
@@ -143,7 +145,9 @@ const FacilityDetail = ({ facility, jobPosts, setJobPosts }) => {
     try {
       setLoading((prev) => ({ ...prev, copying: true }));
       const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/api/v1/jobpost/copy/${selectedJobPostId}`,
+        `${
+          import.meta.env.VITE_APP_API_URL
+        }/api/v1/jobpost/copy/${selectedJobPostId}`,
         {
           facility_id: facility.facility_id,
         }
@@ -235,7 +239,11 @@ const FacilityDetail = ({ facility, jobPosts, setJobPosts }) => {
       <img
         src={facility.photos[0].url || "/placeholder.svg"}
         alt={facility.name}
-        className={`w-full h-32 object-${(156/128 < facility.photos[0].width / facility.photos[0].height) ? "cover" : "contain"} rounded-lg`}
+        className={`w-full h-32 object-${
+          156 / 128 < facility.photos[0].width / facility.photos[0].height
+            ? "cover"
+            : "contain"
+        } rounded-lg`}
       />
     );
   };
@@ -260,7 +268,11 @@ const FacilityDetail = ({ facility, jobPosts, setJobPosts }) => {
       <img
         src={jobPost.photos[0].url || "/placeholder.svg"}
         alt={jobPost.sub_title}
-        className={`w-full h-24 object-${(93/96 < jobPost.photos[0].width / jobPost.photos[0].height) ? "cover" : "contain"} rounded-lg`}
+        className={`w-full h-24 object-${
+          93 / 96 < jobPost.photos[0].width / jobPost.photos[0].height
+            ? "cover"
+            : "contain"
+        } rounded-lg`}
       />
     );
   };

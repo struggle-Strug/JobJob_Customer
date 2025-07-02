@@ -5,7 +5,7 @@ import { Row, Col, Input, Select, message } from "antd";
 import { Link } from "react-router-dom";
 import { Prefectures } from "../../../utils/constants/categories/prefectures.js";
 import { Municipalities } from "../../../utils/constants/categories/municipalities.js";
-import { useAuth } from "../../../context/AuthContext.js";
+import { useAuth } from "../../../context/AuthContext.jsx.js";
 import axios from "axios";
 import { useEffect } from "react";
 import { Helmet } from "react-helmet";
@@ -97,7 +97,7 @@ const CoporateInformation = () => {
 
       if (alreadyRegistered) {
         response = await axios.put(
-          `${process.env.REACT_APP_API_URL}/api/v1/company`,
+          `${import.meta.env.VITE_APP_API_URL}/api/v1/company`,
           companyData
         );
         if (response.data.error) return message.error(response.data.message);
@@ -105,7 +105,7 @@ const CoporateInformation = () => {
         message.success("法人情報を更新しました。");
       } else {
         response = await axios.post(
-          `${process.env.REACT_APP_API_URL}/api/v1/company`,
+          `${import.meta.env.VITE_APP_API_URL}/api/v1/company`,
           companyData
         );
         if (response.data.error) return message.error(response.data.message);
@@ -122,7 +122,7 @@ const CoporateInformation = () => {
   const getCompanyInfo = async () => {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/api/v1/company/`
+        `${import.meta.env.VITE_APP_API_URL}/api/v1/company/`
       );
       if (response.data.error || response.data.isAuthError) {
         if (response.data.isAuthError) return;

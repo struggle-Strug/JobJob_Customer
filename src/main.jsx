@@ -5,7 +5,7 @@ import {
   RouterProvider,
   ScrollRestoration,
 } from "react-router-dom";
-import App from "./App";
+import App from "./App.jsx";
 import { AuthProvider } from "./context/AuthContext.jsx";
 import "./index.css";
 

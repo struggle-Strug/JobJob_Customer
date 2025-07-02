@@ -3,7 +3,7 @@ import axios from "axios";
 import { useState } from "react";
 import { Helmet } from "react-helmet";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../../context/AuthContext";
+import { useAuth } from "../../../context/AuthContext.jsx";
 
 const MailChange = () => {
   const { customer, customerUser } = useAuth();
@@ -12,7 +12,9 @@ const MailChange = () => {
 
   const handleEmail = async () => {
     const response = await axios.put(
-      `${process.env.REACT_APP_API_URL}/api/v1/customers/email/${customerUser?._id}`,
+      `${import.meta.env.VITE_APP_API_URL}/api/v1/customers/email/${
+        customerUser?._id
+      }`,
       { email: email }
     );
     if (response.data.error) return message.error(response.data.message);

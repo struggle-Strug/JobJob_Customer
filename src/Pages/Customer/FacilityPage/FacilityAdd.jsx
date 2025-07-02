@@ -18,7 +18,7 @@ import "rc-slider/assets/index.css";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Loading from "../../../components/Loading";
-import { useAuth } from "../../../context/AuthContext";
+import { useAuth } from "../../../context/AuthContext.jsx";
 import {
   Facilities,
   Features,
@@ -216,7 +216,7 @@ const FacilityAdd = () => {
           });
 
           const response = await axios.post(
-            `${process.env.REACT_APP_API_URL}/api/v1/file/multi`,
+            `${import.meta.env.VITE_APP_API_URL}/api/v1/file/multi`,
             formData,
             {
               headers: {
@@ -302,13 +302,13 @@ const FacilityAdd = () => {
       // Only call the photo API if we have new files
       if (photoUrls.files && photoUrls.files.length > 0) {
         await axios.put(
-          `${process.env.REACT_APP_API_URL}/api/v1/photo/image`,
+          `${import.meta.env.VITE_APP_API_URL}/api/v1/photo/image`,
           photoUrls.files
         );
       }
 
       const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/api/v1/facility`,
+        `${import.meta.env.VITE_APP_API_URL}/api/v1/facility`,
         facilityData
       );
       if (response.data.error) message.error(response.data.error);

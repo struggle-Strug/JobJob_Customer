@@ -15,7 +15,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Loading from "../../../components/Loading";
-import { useAuth } from "../../../context/AuthContext";
+import { useAuth } from "../../../context/AuthContext.jsx";
 import {
   EmploymentType,
   Features,
@@ -345,7 +345,7 @@ const JobPostEdit = () => {
 
       try {
         const response = await axios.post(
-          `${process.env.REACT_APP_API_URL}/api/v1/file/multi`,
+          `${import.meta.env.VITE_APP_API_URL}/api/v1/file/multi`,
           formData,
           {
             headers: {
@@ -376,7 +376,7 @@ const JobPostEdit = () => {
     try {
       setLoading(true);
       const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/api/v1/jobpost/${jobPostId}`
+        `${import.meta.env.VITE_APP_API_URL}/api/v1/jobpost/${jobPostId}`
       );
       const jobData = response.data.jobpost;
       setJobPost(jobData);
@@ -564,12 +564,12 @@ const JobPostEdit = () => {
       };
 
       await axios.put(
-        `${process.env.REACT_APP_API_URL}/api/v1/photo/image`,
+        `${import.meta.env.VITE_APP_API_URL}/api/v1/photo/image`,
         uploadUrls || []
       );
 
       const response = await axios.put(
-        `${process.env.REACT_APP_API_URL}/api/v1/jobpost/${jobPostId}`,
+        `${import.meta.env.VITE_APP_API_URL}/api/v1/jobpost/${jobPostId}`,
         JobPostData
       );
       if (response.data.error) message.error(response.data.error);
@@ -587,7 +587,9 @@ const JobPostEdit = () => {
       setLoading(true);
       await handleSave();
       const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/api/v1/jobpost/${jobPostId}/${status}`
+        `${
+          import.meta.env.VITE_APP_API_URL
+        }/api/v1/jobpost/${jobPostId}/${status}`
       );
       if (response.data.error) message.error(response.data.error);
 
@@ -610,7 +612,7 @@ const JobPostEdit = () => {
     try {
       setLoading(true);
       const response = await axios.delete(
-        `${process.env.REACT_APP_API_URL}/api/v1/jobpost/${jobPostId}`
+        `${import.meta.env.VITE_APP_API_URL}/api/v1/jobpost/${jobPostId}`
       );
       if (response.data.error) message.error(response.data.error);
       message.success("求人を削除しました");
@@ -1120,7 +1122,7 @@ const JobPostEdit = () => {
             name: `Photo ${jobPostPicture.length + index + 1}`,
             url: photo.photoUrl.startsWith("http")
               ? photo.photoUrl
-              : `${process.env.REACT_APP_BASE_IMAGE_URL || ""}${
+              : `${import.meta.env.VITE_APP_BASE_IMAGE_URL || ""}${
                   photo.photoUrl
                 }`,
             status: "done",

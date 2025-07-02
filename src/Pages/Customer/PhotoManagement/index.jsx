@@ -52,7 +52,7 @@ const PhotoManagement = () => {
 
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/api/v1/file/multi`,
+        `${import.meta.env.VITE_APP_API_URL}/api/v1/file/multi`,
         formData,
         {
           headers: {
@@ -72,7 +72,7 @@ const PhotoManagement = () => {
     try {
       const photoName = phototUrl.split("/").pop();
       const response = await axios.delete(
-        `${process.env.REACT_APP_API_URL}/api/v1/file/${photoName}`
+        `${import.meta.env.VITE_APP_API_URL}/api/v1/file/${photoName}`
       );
       if (response.error) return false;
       return true;
@@ -86,7 +86,7 @@ const PhotoManagement = () => {
     try {
       const photoName = phototUrl.split("/").pop();
       const response = await axios.delete(
-        `${process.env.REACT_APP_API_URL}/api/v1/photo/${encodeURIComponent(
+        `${import.meta.env.VITE_APP_API_URL}/api/v1/photo/${encodeURIComponent(
           phototUrl
         )}`
       );
@@ -105,11 +105,11 @@ const PhotoManagement = () => {
   const handleSave = async () => {
     try {
       const files = await handleUpload();
-      await axios.post(`${process.env.REACT_APP_API_URL}/api/v1/photo/`, {
+      await axios.post(`${import.meta.env.VITE_APP_API_URL}/api/v1/photo/`, {
         companyName: companyName,
       });
       await axios.put(
-        `${process.env.REACT_APP_API_URL}/api/v1/photo/image`,
+        `${import.meta.env.VITE_APP_API_URL}/api/v1/photo/image`,
         files || []
       );
       getPhotosByCustomerId();
@@ -123,7 +123,7 @@ const PhotoManagement = () => {
   const getPhotosByCustomerId = async () => {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/api/v1/photo/`
+        `${import.meta.env.VITE_APP_API_URL}/api/v1/photo/`
       );
       setPhotos(response.data.photos?.images);
       setCompanyName(response.data.photos?.companyName);
@@ -144,7 +144,7 @@ const PhotoManagement = () => {
   const updateDescription = async () => {
     try {
       const response = await axios.put(
-        `${process.env.REACT_APP_API_URL}/api/v1/photo/${selectedPhoto}`,
+        `${import.meta.env.VITE_APP_API_URL}/api/v1/photo/${selectedPhoto}`,
         { description: description }
       );
       if (response.data.error) return message.error(response.data.message);

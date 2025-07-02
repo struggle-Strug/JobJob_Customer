@@ -13,7 +13,7 @@ const PhotoSelectModal = ({ visible, onCancel, onSelect }) => {
       setSelectedPhotos([]);
       // 写真データを取得
       axios
-        .get(`${process.env.REACT_APP_API_URL}/api/v1/photo/`)
+        .get(`${import.meta.env.VITE_APP_API_URL}/api/v1/photo/`)
         .then((response) => {
           setPhotos(response.data.photos?.images || []);
         })
@@ -63,7 +63,14 @@ const PhotoSelectModal = ({ visible, onCancel, onSelect }) => {
             <img
               src={photo.photoUrl}
               alt={`Photo ${index}`}
-              style={{ width: 100, height: 75, objectFit: (105/80 < photo.photoWidth / photo.photoHeight) ? "cover" : "contain" }}
+              style={{
+                width: 100,
+                height: 75,
+                objectFit:
+                  105 / 80 < photo.photoWidth / photo.photoHeight
+                    ? "cover"
+                    : "contain",
+              }}
             />
           </div>
         ))}

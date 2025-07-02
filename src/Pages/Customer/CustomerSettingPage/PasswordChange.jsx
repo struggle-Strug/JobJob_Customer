@@ -3,7 +3,7 @@ import axios from "axios";
 import { useState } from "react";
 import { Helmet } from "react-helmet";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../../context/AuthContext";
+import { useAuth } from "../../../context/AuthContext.jsx";
 
 const PasswordChange = () => {
   const { customer, customerUser } = useAuth();
@@ -19,7 +19,9 @@ const PasswordChange = () => {
       return;
     }
     const resData = await axios.put(
-      `${process.env.REACT_APP_API_URL}/api/v1/customers/password/${customerUser?._id}`,
+      `${import.meta.env.VITE_APP_API_URL}/api/v1/customers/password/${
+        customerUser?._id
+      }`,
       { currentPassword: currentPassword, newPassword: newPassword }
     );
     if (resData.data.error || resData.data.isAuthError) {
