@@ -38,7 +38,9 @@ const ProcessDetail = ({
   // Create job post link
   const jobPostLink = useCallback((jobPost) => {
     const jobType = getJobTypeValue(JobType, jobPost.type);
-    return `/${jobType}/${jobPost.jobpost_id}`;
+    return `${import.meta.env.VITE_APP_FRONTEND_URL}/${jobType}/${
+      jobPost.jobpost_id
+    }`;
   }, []);
 
   // Handle profile modal
