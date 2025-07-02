@@ -1,6 +1,6 @@
 // import { ReactComponent as Avatar } from "../../../avatar.svg";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../../../context/AuthContext";
+import { useAuth } from "../../../context/AuthContext.jsx";
 import { useEffect } from "react";
 
 const CompanyLandingPage = () => {

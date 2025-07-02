@@ -27,7 +27,7 @@ import {
   Prefectures,
 } from "../../../utils/constants/categories";
 import { getBase64 } from "../../../utils/getBase64";
-import { useAuth } from "../../../context/AuthContext";
+import { useAuth } from "../../../context/AuthContext.jsx";
 import { getJobValueByKey } from "../../../utils/getFunctions";
 import PhotoSelectModal from "./PhotoSelectModal";
 import Loading from "../../../components/Loading";
@@ -227,7 +227,7 @@ const FacilityEdit = () => {
           });
 
           const response = await axios.post(
-            `${process.env.REACT_APP_API_URL}/api/v1/file/multi`,
+            `${import.meta.env.VITE_APP_API_URL}/api/v1/file/multi`,
             formData,
             {
               headers: {
@@ -271,7 +271,7 @@ const FacilityEdit = () => {
     try {
       setLoading(true);
       const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/api/v1/facility/${id}`
+        `${import.meta.env.VITE_APP_API_URL}/api/v1/facility/${id}`
       );
 
       const fetchedFacility = response.data.facility;
@@ -368,7 +368,7 @@ const FacilityEdit = () => {
             });
 
             const response = await axios.post(
-              `${process.env.REACT_APP_API_URL}/api/v1/file/multi`,
+              `${import.meta.env.VITE_APP_API_URL}/api/v1/file/multi`,
               formData,
               {
                 headers: {
@@ -429,13 +429,15 @@ const FacilityEdit = () => {
       // Only call the photo API if we have new files
       if (uploadedFiles && uploadedFiles.length > 0) {
         await axios.put(
-          `${process.env.REACT_APP_API_URL}/api/v1/photo/image`,
+          `${import.meta.env.VITE_APP_API_URL}/api/v1/photo/image`,
           uploadedFiles
         );
       }
 
       const response = await axios.put(
-        `${process.env.REACT_APP_API_URL}/api/v1/facility/${facility?.facility_id}`,
+        `${import.meta.env.VITE_APP_API_URL}/api/v1/facility/${
+          facility?.facility_id
+        }`,
         facilityData
       );
       if (response.data.error) {
@@ -458,7 +460,7 @@ const FacilityEdit = () => {
 
   const handleRequest = async (status) => {
     const response = await axios.post(
-      `${process.env.REACT_APP_API_URL}/api/v1/facility/${id}/${status}`
+      `${import.meta.env.VITE_APP_API_URL}/api/v1/facility/${id}/${status}`
     );
     if (response.data.error) message.error(response.data.error);
     if (response.data.isAuthError) return;
@@ -468,7 +470,7 @@ const FacilityEdit = () => {
 
   const handleDeleteFacility = async () => {
     const response = await axios.delete(
-      `${process.env.REACT_APP_API_URL}/api/v1/facility/${id}`
+      `${import.meta.env.VITE_APP_API_URL}/api/v1/facility/${id}`
     );
     if (response.data.error) return message.error(response.data.error);
     if (response.data.isAuthError) return;

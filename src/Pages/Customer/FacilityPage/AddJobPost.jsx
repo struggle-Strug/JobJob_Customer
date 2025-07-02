@@ -15,7 +15,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Loading from "../../../components/Loading";
-import { useAuth } from "../../../context/AuthContext";
+import { useAuth } from "../../../context/AuthContext.jsx";
 import {
   EmploymentType,
   Features,
@@ -111,8 +111,8 @@ const AddJobPost = () => {
   const { pathname } = useLocation();
   const facilityId = pathname.split("/")[3];
 
-  const SHEET_ID = process.env.REACT_APP_SHEET_ID;
-  const API_KEY = process.env.REACT_APP_GOOGLE_API_KEY;
+  const SHEET_ID = import.meta.env.VITE_APP_SHEET_ID;
+  const API_KEY = import.meta.env.VITE_APP_GOOGLE_API_KEY;
   const RANGE = "Sheet1!A1:BS411";
 
   const fetchSheetData = async () => {
@@ -325,7 +325,7 @@ const AddJobPost = () => {
 
       try {
         const response = await axios.post(
-          `${process.env.REACT_APP_API_URL}/api/v1/file/multi`,
+          `${import.meta.env.VITE_APP_API_URL}/api/v1/file/multi`,
           formData,
           {
             headers: {
@@ -431,12 +431,12 @@ const AddJobPost = () => {
       };
 
       await axios.put(
-        `${process.env.REACT_APP_API_URL}/api/v1/photo/image`,
+        `${import.meta.env.VITE_APP_API_URL}/api/v1/photo/image`,
         uploadUrls || []
       );
 
       const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/api/v1/jobpost`,
+        `${import.meta.env.VITE_APP_API_URL}/api/v1/jobpost`,
         JobPostData
       );
       if (response.data.error || response.data.isAuthError)
@@ -482,7 +482,7 @@ const AddJobPost = () => {
 
   const getFacility = async () => {
     const response = await axios.get(
-      `${process.env.REACT_APP_API_URL}/api/v1/facility/${facilityId}`
+      `${import.meta.env.VITE_APP_API_URL}/api/v1/facility/${facilityId}`
     );
     if (response.data.error) message.error(response.data.error);
     if (response.data.isAuthError) return;

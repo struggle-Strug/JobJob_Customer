@@ -2,7 +2,7 @@ import { Helmet } from "react-helmet";
 import { message } from "antd";
 import axios from "axios";
 import { useCallback, useEffect, useState } from "react";
-import { useAuth } from "../../../context/AuthContext";
+import { useAuth } from "../../../context/AuthContext.jsx";
 import ProcessDetail from "./ProcessDetail";
 
 const ProcessManagementPage = () => {
@@ -14,7 +14,9 @@ const ProcessManagementPage = () => {
   const getProcessesByStatus = useCallback(async () => {
     try {
       const res = await axios.get(
-        `${process.env.REACT_APP_API_URL}/api/v1/message/${customer?._id}/${status}`
+        `${import.meta.env.VITE_APP_API_URL}/api/v1/message/${
+          customer?._id
+        }/${status}`
       );
       if (res.data.error) return message.error(res.data.error);
       if (res.data.isAuthError) return;
@@ -30,7 +32,7 @@ const ProcessManagementPage = () => {
   const getJobNumbersByStatus = useCallback(async () => {
     try {
       const res = await axios.get(
-        `${process.env.REACT_APP_API_URL}/api/v1/message/jobNumbers`
+        `${import.meta.env.VITE_APP_API_URL}/api/v1/message/jobNumbers`
       );
       if (res.data.error) return message.error(res.data.error);
       if (res.data.isAuthError) return;

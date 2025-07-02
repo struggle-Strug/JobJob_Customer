@@ -104,15 +104,13 @@ function App() {
   const getUserData = useCallback(async () => {
     try {
       const res = await axios.get(
-        `${process.env.REACT_APP_API_URL}/api/v1/user/tokenlogin`
+        `${import.meta.env.VITE_APP_API_URL}/api/v1/user/tokenlogin`
       );
 
       if (res.data?.isAuthError) {
         // This is handled by the interceptor, just return
         return;
       }
-
-      //localStorage.setItem("token", res.data.token);
 
       if (res.data.user.type === "member") {
         setUser(res.data.user.data);

@@ -4,7 +4,7 @@ import { useLocation } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../../../../context/AuthContext";
+import { useAuth } from "../../../../context/AuthContext.jsx";
 
 const CustomerSignIn = () => {
   const { setCustomer, setCustomerUser } = useAuth();
@@ -26,7 +26,7 @@ const CustomerSignIn = () => {
       password: password,
     };
     const resData = await axios.post(
-      `${process.env.REACT_APP_API_URL}/api/v1/customers/signin`,
+      `${import.meta.env.VITE_APP_API_URL}/api/v1/customers/signin`,
       signInData
     );
     if (resData.data.error)

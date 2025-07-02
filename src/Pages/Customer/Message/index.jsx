@@ -18,7 +18,7 @@ const Message = () => {
     setIsLoading(true);
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/api/v1/message/company`
+        `${import.meta.env.VITE_APP_API_URL}/api/v1/message/company`
       );
       if (response.data.error) {
         antdMessage.error(response.data.message);

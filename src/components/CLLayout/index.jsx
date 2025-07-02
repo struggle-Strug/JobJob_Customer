@@ -1,5 +1,5 @@
 import { Link, Outlet } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../../context/AuthContext.jsx";
 
 const CLLayout = () => {
   const { customer, customerUser } = useAuth();
@@ -17,7 +17,8 @@ const CLLayout = () => {
               />
             </Link>
             <p className="lg:text-base text-sm font-bold">
-              {customerUser?.companyName} | {customerUser?.email ? customerUser?.email : ""}
+              {customer?.companyName} |{" "}
+              {customer?.email ? customer?.email : customerUser?.email}
             </p>
           </div>
           <Link to={"#"} className="lg:text-base text-sm font-bold">

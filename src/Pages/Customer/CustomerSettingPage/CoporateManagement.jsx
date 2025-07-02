@@ -1,7 +1,7 @@
 import axios from "axios";
 import { Button, Input, message, Modal, Space, Table } from "antd";
 import { useEffect, useState } from "react";
-import { useAuth } from "../../../context/AuthContext";
+import { useAuth } from "../../../context/AuthContext.jsx";
 import { Helmet } from "react-helmet";
 
 const CoporateManagement = () => {
@@ -74,7 +74,7 @@ const CoporateManagement = () => {
     };
 
     const response = await axios.post(
-      `${process.env.REACT_APP_API_URL}/api/v1/customers/users`,
+      `${import.meta.env.VITE_APP_API_URL}/api/v1/customers/users`,
       newCustomer
     );
     if (response.data.error) return message.error(response.data.message);
@@ -86,7 +86,7 @@ const CoporateManagement = () => {
 
   const handleDelete = async (id) => {
     const response = await axios.delete(
-      `${process.env.REACT_APP_API_URL}/api/v1/customers/users/${id}`
+      `${import.meta.env.VITE_APP_API_URL}/api/v1/customers/users/${id}`
     );
     if (response.data.error) return message.error(response.data.message);
     if (response.data.isAuthError) return;
@@ -98,7 +98,7 @@ const CoporateManagement = () => {
     try {
       setIsLoading(true);
       const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/api/v1/customers/users`
+        `${import.meta.env.VITE_APP_API_URL}/api/v1/customers/users`
       );
       if (response.data.error) return message.error(response.data.message);
       if (response.data.isAuthError) return;

@@ -70,7 +70,7 @@ const ProcessDetail = ({
     async (value) => {
       try {
         const response = await axios.put(
-          `${process.env.REACT_APP_API_URL}/api/v1/message/${message_id}`,
+          `${import.meta.env.VITE_APP_API_URL}/api/v1/message/${message_id}`,
           {
             status: value,
             updated_at: new Date(),
@@ -110,7 +110,7 @@ const ProcessDetail = ({
       try {
         const memoValue = memos[messageId];
         const response = await axios.put(
-          `${process.env.REACT_APP_API_URL}/api/v1/message/${messageId}`,
+          `${import.meta.env.VITE_APP_API_URL}/api/v1/message/${messageId}`,
           {
             memo: memoValue,
             updated_at: new Date(),

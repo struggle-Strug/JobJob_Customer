@@ -35,12 +35,12 @@ const CustomerSignUp = () => {
       email: email,
     };
 
-    await axios.post(`${process.env.REACT_APP_API_URL}/api/v1/photo`, {
+    await axios.post(`${import.meta.env.VITE_APP_API_URL}/api/v1/photo`, {
       companyName: companyName,
     });
 
     const resData = await axios.post(
-      `${process.env.REACT_APP_API_URL}/api/v1/customers/signup`,
+      `${import.meta.env.VITE_APP_API_URL}/api/v1/customers/signup`,
       newCustomer
     );
     if (resData.data.error) return message.error(resData.data.message);

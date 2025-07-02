@@ -33,7 +33,7 @@ const MessageDetails = ({ id, onMessageSent, onMessageRead }) => {
 
       try {
         const res = await axios.get(
-          `${process.env.REACT_APP_API_URL}/api/v1/message/company/${id}`
+          `${import.meta.env.VITE_APP_API_URL}/api/v1/message/company/${id}`
         );
         if (res.data.error) {
           Message.error(res.data.message);
@@ -78,7 +78,9 @@ const MessageDetails = ({ id, onMessageSent, onMessageRead }) => {
     try {
       // Call API to mark message as read
       await axios.put(
-        `${process.env.REACT_APP_API_URL}/api/v1/message/read/${messageToMark._id}`
+        `${import.meta.env.VITE_APP_API_URL}/api/v1/message/read/${
+          messageToMark._id
+        }`
       );
 
       // Update the message locally
@@ -124,7 +126,7 @@ const MessageDetails = ({ id, onMessageSent, onMessageRead }) => {
 
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/api/v1/file/multi`,
+        `${import.meta.env.VITE_APP_API_URL}/api/v1/file/multi`,
         formData,
         {
           headers: {
@@ -159,7 +161,7 @@ const MessageDetails = ({ id, onMessageSent, onMessageRead }) => {
       };
 
       const res = await axios.post(
-        `${process.env.REACT_APP_API_URL}/api/v1/message/send`,
+        `${import.meta.env.VITE_APP_API_URL}/api/v1/message/send`,
         messageData
       );
 
@@ -326,7 +328,7 @@ const MessageDetails = ({ id, onMessageSent, onMessageRead }) => {
                         <Link
                           key={fileIndex}
                           to={`${
-                            process.env.REACT_APP_API_URL
+                            import.meta.env.VITE_APP_API_URL
                           }/api/v1/file/download/${file.fileUrl
                             .split("/")
                             .pop()}`}
