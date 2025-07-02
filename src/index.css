@@ -1,0 +1,36 @@
+@import "./styles/antd-var.css";
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  margin: 0;
+  font-family: "Noto Sans JP", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+pre {
+  white-space: pre-wrap;
+  font-family: "Noto Sans JP", sans-serif;
+}
+
+.container {
+  @apply max-w-[1024px] mx-auto;
+}
+
+.clcontainer {
+  @apply max-w-[1200px] mx-auto;
+}
+
+.number {
+  font-family: "Roboto", sans-serif;
+}

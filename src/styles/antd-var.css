@@ -1,0 +1,80 @@
+.ant-checkbox-wrapper {
+  font-family: "Noto Sans JP", sans-serif;
+  @apply bg-[#fffbfb] lg:text-[1rem] md:text-sm text-xs p-4 rounded-lg border-[0.05rem] border-[#a7a3a3] mt-2;
+}
+
+.desire .ant-checkbox-wrapper {
+  font-family: "Noto Sans JP", sans-serif;
+  @apply bg-[#ffe3e3] lg:text-base md:text-sm text-xs p-2 rounded-lg mt-0.5 border-none w-full;
+}
+
+.qualification .ant-checkbox-wrapper {
+  font-family: "Noto Sans JP", sans-serif;
+  @apply bg-[#fff7f7] lg:text-base md:text-sm text-xs p-2 rounded-lg mt-0.5 border-none w-full;
+}
+
+.desireEmployment .ant-checkbox-wrapper {
+  font-family: "Noto Sans JP", sans-serif;
+  @apply bg-[#ffe3e3] lg:text-base md:text-sm text-xs p-2 rounded-lg mt-0.5 border-none;
+}
+
+.ant-radio-wrapper {
+  font-family: "Noto Sans JP", sans-serif;
+  @apply bg-[#ffe3e3] lg:text-base md:text-sm text-xs p-2 rounded-lg mt-0.5 border-none;
+}
+
+.textarea textarea {
+  font-family: "Noto Sans JP", sans-serif;
+  @apply h-40;
+}
+
+.modal {
+  font-family: "Noto Sans JP", sans-serif;
+}
+
+.ant-input,
+.ant-input * {
+  font-family: "Noto Sans JP", sans-serif;
+}
+
+.ant-select,
+.ant-select * {
+  font-family: "Noto Sans JP", sans-serif;
+}
+
+.ant-table,
+.ant-table * {
+  font-family: "Noto Sans JP", sans-serif;
+}
+
+.ant-radio-wrapper,
+.ant-radio-wrapper * {
+  font-family: "Noto Sans JP", sans-serif;
+}
+
+.ant-btn,
+.ant-btn * {
+  font-family: "Noto Sans JP", sans-serif;
+}
+
+.ant-upload,
+.ant-upload * {
+  font-family: "Noto Sans JP", sans-serif;
+}
+
+.ant-select,
+.ant-select * {
+  font-family: "Noto Sans JP", sans-serif;
+}
+
+.ant-col,
+.ant-col * {
+  font-family: "Noto Sans JP", sans-serif;
+}
+
+.ant-row,
+.ant-row * {
+  font-family: "Noto Sans JP", sans-serif;
+}
+
+
