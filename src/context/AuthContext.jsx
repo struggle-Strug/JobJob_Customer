@@ -40,7 +40,7 @@ export const AuthProvider = ({ children }) => {
 
     // Show message to user - only if this is not an automatic logout
     if (options?.showMessage !== false) {
-      message.error(
+      toast.error(
         "セッションの有効期限が切れました。再度ログインしてください。"
       );
     }

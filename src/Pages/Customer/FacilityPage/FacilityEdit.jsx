@@ -3,6 +3,8 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
+import { toast } from "react-hot-toast";
+
 import {
   Checkbox,
   Input,
@@ -184,7 +186,7 @@ const FacilityEdit = () => {
 
     // Check if adding this would exceed the limit
     if (facilityPhoto.length >= 10) {
-      message.error("最大10枚までしか選択できません");
+      toast.error("最大10枚までしか選択できません");
       return;
     }
 
@@ -245,10 +247,10 @@ const FacilityEdit = () => {
           uploadedFiles = [...uploadedFiles, ...response.data.files];
         }
 
-        message.success("ファイルのアップロードに完了しました");
+        toast.success("ファイルのアップロードに完了しました");
       } catch (error) {
         console.error("Upload error:", error);
-        message.error(
+        toast.error(
           `ファイルのアップロードに失敗しました: ${
             error.message || "Unknown error"
           }`
@@ -323,16 +325,16 @@ const FacilityEdit = () => {
     try {
       // Validate required fields first
       if (facilityName === "") {
-        return message.error("施設名を入力してください。");
+        return toast.error("施設名を入力してください。");
       }
       if (facilityPostalCode === "") {
-        return message.error("郵便番号を入力してください。");
+        return toast.error("郵便番号を入力してください。");
       } else if (facilityPrefecture === "") {
-        return message.error("都道府県を選択してください。");
+        return toast.error("都道府県を選択してください。");
       } else if (facilityCity === "") {
-        return message.error("市区町村を入力してください。");
+        return toast.error("市区町村を入力してください。");
       } else if (facilityVillage === "") {
-        return message.error("町名・番地を入力してください。");
+        return toast.error("町名・番地を入力してください。");
       }
 
       // Separate existing and new images
@@ -349,7 +351,7 @@ const FacilityEdit = () => {
       let uploadedFiles = [];
 
       if (newImages.length > 0) {
-        message.loading("写真をアップロード中...", 0);
+        toast.loading("写真をアップロード中...", 0);
 
         try {
           // Split files into batches of 3 to prevent server overload
@@ -386,17 +388,17 @@ const FacilityEdit = () => {
             uploadedFiles = [...uploadedFiles, ...response.data.files];
           }
 
-          message.success("ファイルのアップロードに完了しました");
+          toast.success("ファイルのアップロードに完了しました");
         } catch (error) {
           console.error("Upload error:", error);
-          message.error(
+          toast.error(
             `ファイルのアップロードに失敗しました: ${
               error.message || "Unknown error"
             }`
           );
           return;
         } finally {
-          message.destroy();
+          toast.destroy();
         }
       }
 
@@ -441,14 +443,14 @@ const FacilityEdit = () => {
         facilityData
       );
       if (response.data.error) {
-        return message.error(response.data.error);
+        return toast.error(response.data.error);
       }
       if (response.data.isAuthError) return;
-      message.success(response.data.message);
+      toast.success(response.data.message);
       setSuccessModalOpen(true);
     } catch (error) {
       console.error("Facility save error:", error);
-      message.error(
+      toast.error(
         `施設の保存中にエラーが発生しました: ${
           error.message || "Unknown error"
         }`
@@ -462,7 +464,7 @@ const FacilityEdit = () => {
     const response = await axios.post(
       `${import.meta.env.VITE_APP_API_URL}/api/v1/facility/${id}/${status}`
     );
-    if (response.data.error) message.error(response.data.error);
+    if (response.data.error) toast.error(response.data.error);
     if (response.data.isAuthError) return;
     if (status === "ended") return setEndModal(true);
     navigate(`/customers/facility`);
@@ -472,9 +474,9 @@ const FacilityEdit = () => {
     const response = await axios.delete(
       `${import.meta.env.VITE_APP_API_URL}/api/v1/facility/${id}`
     );
-    if (response.data.error) return message.error(response.data.error);
+    if (response.data.error) return toast.error(response.data.error);
     if (response.data.isAuthError) return;
-    message.success("削除成功");
+    toast.success("削除成功");
     navigate("/customers/facility");
   };
 
@@ -513,7 +515,7 @@ const FacilityEdit = () => {
     return new Promise((resolve) => {
       // Check if the base64 string is valid
       if (!base64 || !base64.startsWith("data:image")) {
-        message.error("Invalid image format");
+        toast.error("Invalid image format");
         resolve(null);
         return;
       }
@@ -561,12 +563,12 @@ const FacilityEdit = () => {
         };
 
         img.onerror = () => {
-          message.error("Image processing failed");
+          toast.error("Image processing failed");
           resolve(null);
         };
       } catch (error) {
         console.error("Image processing error:", error);
-        message.error("Image processing failed");
+        toast.error("Image processing failed");
         resolve(null);
       }
     });
@@ -672,7 +674,7 @@ const FacilityEdit = () => {
                 onClick={() => {
                   // Check if we've already reached the maximum number of photos
                   if (facilityPhoto.length >= 10) {
-                    message.error("最大10枚までしか選択できません");
+                    toast.error("最大10枚までしか選択できません");
                     return;
                   }
 
@@ -685,7 +687,7 @@ const FacilityEdit = () => {
                     if (file) {
                       // Check file size (limit to 5MB)
                       if (file.size > 5 * 1024 * 1024) {
-                        message.error("ファイルサイズは5MB以下にしてください");
+                        toast.error("ファイルサイズは5MB以下にしてください");
                         return;
                       }
 
@@ -702,7 +704,7 @@ const FacilityEdit = () => {
                         })
                         .catch((error) => {
                           console.error("File processing error:", error);
-                          message.error("ファイル処理中にエラーが発生しました");
+                          toast.error("ファイル処理中にエラーが発生しました");
                         });
                     }
                   };
@@ -1191,7 +1193,7 @@ const FacilityEdit = () => {
           // 既存の画像数と新たに追加する画像数の合計をチェック
           const totalPhotos = facilityPhoto.length + formattedPhotos.length;
           if (totalPhotos > 10) {
-            message.error("最大10枚までしか選択できません");
+            toast.error("最大10枚までしか選択できません");
             return;
           }
           setFacilityPhoto((prev) => [...prev, ...formattedPhotos]);

@@ -3,6 +3,7 @@ import { Button, Input, message, Modal, Space, Table } from "antd";
 import { useEffect, useState } from "react";
 import { useAuth } from "../../../context/AuthContext.jsx";
 import { Helmet } from "react-helmet";
+import { toast } from "react-hot-toast";
 
 const CoporateManagement = () => {
   const { customer } = useAuth();
@@ -60,10 +61,10 @@ const CoporateManagement = () => {
   }));
 
   const handleAdd = async () => {
-    if (email === "") return message.error("メールアドレスを入力してください");
-    if (password === "") return message.error("パスワードを入力してください");
+    if (email === "") return toast.error("メールアドレスを入力してください");
+    if (password === "") return toast.error("パスワードを入力してください");
     if (password !== confirmPassword)
-      return message.error("パスワードが一致しません");
+      return toast.error("パスワードが一致しません");
 
     const newCustomer = {
       contactPerson: `${contactPersonSei} ${contactPersonMei}`,
@@ -77,9 +78,9 @@ const CoporateManagement = () => {
       `${import.meta.env.VITE_APP_API_URL}/api/v1/customers/users`,
       newCustomer
     );
-    if (response.data.error) return message.error(response.data.message);
+    if (response.data.error) return toast.error(response.data.message);
     if (response.data.isAuthError) return;
-    message.success("ユーザー追加完了");
+    toast.success("ユーザー追加完了");
     setAddUserModal(false);
     getUsers();
   };
@@ -88,9 +89,9 @@ const CoporateManagement = () => {
     const response = await axios.delete(
       `${import.meta.env.VITE_APP_API_URL}/api/v1/customers/users/${id}`
     );
-    if (response.data.error) return message.error(response.data.message);
+    if (response.data.error) return toast.error(response.data.message);
     if (response.data.isAuthError) return;
-    message.success("ユーザー削除完了");
+    toast.success("ユーザー削除完了");
     getUsers();
   };
 
@@ -100,7 +101,7 @@ const CoporateManagement = () => {
       const response = await axios.get(
         `${import.meta.env.VITE_APP_API_URL}/api/v1/customers/users`
       );
-      if (response.data.error) return message.error(response.data.message);
+      if (response.data.error) return toast.error(response.data.message);
       if (response.data.isAuthError) return;
       setUsers(response.data.users);
     } catch (error) {

@@ -3,6 +3,8 @@
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import moment from "moment";
 import { Link } from "react-router-dom";
+import { toast } from "react-hot-toast";
+
 import { message, Modal, Select, Spin } from "antd";
 import axios from "axios";
 import FacilityPreview from "./FacilityPreview";
@@ -96,7 +98,7 @@ const FacilityDetail = ({ facility, jobPosts, setJobPosts }) => {
       );
 
       if (response.data.error) {
-        message.error(response.data.message || "施設情報の取得に失敗しました");
+        toast.error(response.data.message || "施設情報の取得に失敗しました");
         return;
       }
       if (response.data.isAuthError) return;
@@ -104,7 +106,7 @@ const FacilityDetail = ({ facility, jobPosts, setJobPosts }) => {
       setCompanyFacilities(response.data.facilities || []);
     } catch (error) {
       console.error("Error fetching company facilities:", error);
-      message.error("施設情報の取得中にエラーが発生しました");
+      toast.error("施設情報の取得中にエラーが発生しました");
     } finally {
       setLoading((prev) => ({ ...prev, facilities: false }));
     }
@@ -122,7 +124,7 @@ const FacilityDetail = ({ facility, jobPosts, setJobPosts }) => {
       );
 
       if (response.data.error) {
-        message.error(response.data.message || "求人情報の取得に失敗しました");
+        toast.error(response.data.message || "求人情報の取得に失敗しました");
         return;
       }
       if (response.data.isAuthError) return;
@@ -130,7 +132,7 @@ const FacilityDetail = ({ facility, jobPosts, setJobPosts }) => {
       setSelectedJobPosts(response.data.jobposts || []);
     } catch (error) {
       console.error("Error fetching job posts:", error);
-      message.error("求人情報の取得中にエラーが発生しました");
+      toast.error("求人情報の取得中にエラーが発生しました");
     } finally {
       setLoading((prev) => ({ ...prev, jobPosts: false }));
     }
@@ -138,7 +140,7 @@ const FacilityDetail = ({ facility, jobPosts, setJobPosts }) => {
 
   const handleCopy = useCallback(async () => {
     if (!selectedJobPostId || !facility?.facility_id) {
-      message.error("求人と施設を選択してください");
+      toast.error("求人と施設を選択してください");
       return;
     }
 
@@ -154,11 +156,11 @@ const FacilityDetail = ({ facility, jobPosts, setJobPosts }) => {
       );
 
       if (response.data.error) {
-        message.error(response.data.error || "求人のコピーに失敗しました");
+        toast.error(response.data.error || "求人のコピーに失敗しました");
         return;
       }
 
-      message.success("求人をコピーしました");
+      toast.success("求人をコピーしました");
       setCopyJobPost(false);
       setSelectedCompanyFacility("");
       setSelectedJobPostId("");
@@ -167,7 +169,7 @@ const FacilityDetail = ({ facility, jobPosts, setJobPosts }) => {
       setJobPosts((prev) => [response.data.jobpost, ...prev]);
     } catch (error) {
       console.error("Error copying job post:", error);
-      message.error("求人のコピー中にエラーが発生しました");
+      toast.error("求人のコピー中にエラーが発生しました");
     } finally {
       setLoading((prev) => ({ ...prev, copying: false }));
     }

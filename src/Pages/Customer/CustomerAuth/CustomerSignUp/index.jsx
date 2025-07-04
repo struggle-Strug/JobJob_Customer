@@ -1,5 +1,6 @@
 import { Input, message } from "antd";
 import { useEffect, useState } from "react";
+import { toast } from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 import { GoLink } from "react-icons/go";
 import axios from "axios";
@@ -16,15 +17,13 @@ const CustomerSignUp = () => {
   const navigate = useNavigate();
 
   const handleSubmit = async () => {
-    if (companyName === "") return message.error("法人名を入力してください。");
+    if (companyName === "") return toast.error("法人名を入力してください。");
     if (contactPersonSei === "" || contactPersonMei === "")
-      return message.error("担当者氏名を入力してください。");
-    if (phoneNumber === "")
-      return message.error("電話番号を入力してください。");
-    if (email === "")
-      return message.error("メールアドレスを入力してください。");
+      return toast.error("担当者氏名を入力してください。");
+    if (phoneNumber === "") return toast.error("電話番号を入力してください。");
+    if (email === "") return toast.error("メールアドレスを入力してください。");
     if (email.includes("@") === false)
-      return message.error("メールアドレスの形式が正しくありません。");
+      return toast.error("メールアドレスの形式が正しくありません。");
 
     const newCustomer = {
       companyName: companyName,
@@ -43,9 +42,9 @@ const CustomerSignUp = () => {
       `${import.meta.env.VITE_APP_API_URL}/api/v1/customers/signup`,
       newCustomer
     );
-    if (resData.data.error) return message.error(resData.data.message);
+    if (resData.data.error) return toast.error(resData.data.message);
     if (resData.data.isAuthError) return;
-    message.success(
+    toast.success(
       "パスワードのご案内メールを送信しました。メールボックスをご確認ください。"
     );
     navigate("/customers/sign_in");

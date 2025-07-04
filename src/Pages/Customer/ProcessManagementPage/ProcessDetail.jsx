@@ -1,6 +1,8 @@
 "use client";
 
 import { message, Modal, Button, Table, Input } from "antd";
+import { toast } from "react-hot-toast";
+
 import moment from "moment";
 import { useState, useCallback, useMemo } from "react";
 import MemberDetailModal from "./MemberDetailModal";
@@ -80,16 +82,16 @@ const ProcessDetail = ({
         );
 
         if (response.data.error) {
-          message.error(response.data.message);
+          toast.error(response.data.message);
           return;
         }
         if (response.data.isAuthError) return;
 
-        message.success("ステータスを変更しました。");
+        toast.success("ステータスを変更しました。");
         getProcessesByStatus();
         getJobNumbersByStatus(); // Add this line to update the job numbers
       } catch (error) {
-        message.error("ステータスの更新に失敗しました。");
+        toast.error("ステータスの更新に失敗しました。");
         console.error("Status update error:", error);
       } finally {
         setMessage_id("");
@@ -120,15 +122,15 @@ const ProcessDetail = ({
         );
 
         if (response.data.error) {
-          message.error(response.data.message);
+          toast.error(response.data.message);
           return;
         }
         if (response.data.isAuthError) return;
 
-        message.success("メモを保存しました。");
+        toast.success("メモを保存しました。");
         getProcessesByStatus();
       } catch (error) {
-        message.error("メモの保存に失敗しました。");
+        toast.error("メモの保存に失敗しました。");
         console.error("Memo save error:", error);
       }
     },

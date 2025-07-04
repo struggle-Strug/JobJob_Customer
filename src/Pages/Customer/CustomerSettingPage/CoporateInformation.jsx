@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { Row, Col, Input, Select, message } from "antd";
+import { toast } from "react-hot-toast";
+
 import { Link } from "react-router-dom";
 import { Prefectures } from "../../../utils/constants/categories/prefectures.js";
 import { Municipalities } from "../../../utils/constants/categories/municipalities.js";
@@ -71,7 +73,7 @@ const CoporateInformation = () => {
     if (/^\d*$/.test(value)) {
       setter(value);
     } else {
-      message.error(`${fieldName}は数字のみ入力してください`);
+      toast.error(`${fieldName}は数字のみ入力してください`);
     }
   };
 
@@ -100,22 +102,22 @@ const CoporateInformation = () => {
           `${import.meta.env.VITE_APP_API_URL}/api/v1/company`,
           companyData
         );
-        if (response.data.error) return message.error(response.data.message);
+        if (response.data.error) return toast.error(response.data.message);
         if (response.data.isAuthError) return;
-        message.success("法人情報を更新しました。");
+        toast.success("法人情報を更新しました。");
       } else {
         response = await axios.post(
           `${import.meta.env.VITE_APP_API_URL}/api/v1/company`,
           companyData
         );
-        if (response.data.error) return message.error(response.data.message);
+        if (response.data.error) return toast.error(response.data.message);
         if (response.data.isAuthError) return;
-        message.success("法人情報を登録しました。");
+        toast.success("法人情報を登録しました。");
         setAlreadyRegistered(true);
       }
     } catch (err) {
       console.error(err);
-      message.error("エラーが発生しました。");
+      toast.error("エラーが発生しました。");
     }
   };
 
@@ -143,7 +145,7 @@ const CoporateInformation = () => {
           }
           setPhoneNumber(customer.phoneNumber);
         } else {
-          return message.error(response.data.message);
+          return toast.error(response.data.message);
         }
       } else {
         setAlreadyRegistered(true);
@@ -165,7 +167,7 @@ const CoporateInformation = () => {
     } catch (error) {
       if (error.status != 401) {
         console.error(error);
-        message.error("エラーが発生しました");
+        toast.error("エラーが発生しました");
       }
     }
   };
