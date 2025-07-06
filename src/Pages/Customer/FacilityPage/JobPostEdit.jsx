@@ -79,7 +79,12 @@ const JobPostEdit = () => {
     useState("");
   const [jobPostProcess, setJobPostProcess] = useState("");
   const [status, setStatus] = useState("");
-  const [successModalOpen, setSuccessModalOpen] = useState(false);
+  const [successModal, setSuccessModal] = useState(false);
+  const [draftModal, setDraftModal] = useState(false);
+  const [endModal, setEndModal] = useState(false);
+  const [end2Modal, setEnd2Modal] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [delete2Modal, setDelete2Modal] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const [previewImage, setPreviewImage] = useState("");
@@ -353,7 +358,7 @@ const JobPostEdit = () => {
             },
           }
         );
-        message.success("写真のアップロードが完了しました");
+        //("写真のアップロードが完了しました");
         uploadedFileUrls = response.data.files.map((item) => item.fileUrl);
         uploadedFiles = response.data.files;
       } catch (error) {
@@ -473,8 +478,8 @@ const JobPostEdit = () => {
   };
 
   const handleSave = async () => {
-    setLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    //setLoading(true);
+    //await new Promise((resolve) => setTimeout(resolve, 2000));
 
     try {
       // バリデーションチェック（失敗した場合は早期リターン）
@@ -573,12 +578,12 @@ const JobPostEdit = () => {
         JobPostData
       );
       if (response.data.error) message.error(response.data.error);
-      else message.success("求人を更新しました");
-      navigate("/customers/facility");
+      //else message.success("求人を更新しました");
+      //navigate("/customers/facility");
     } catch (error) {
       console.error("Error updating job post:", error);
     } finally {
-      setLoading(false);
+      //setLoading(false);
     }
   };
 
@@ -593,13 +598,15 @@ const JobPostEdit = () => {
       );
       if (response.data.error) message.error(response.data.error);
 
-      if (status === "pending") {
-        setSuccessModalOpen(true);
+      if (status === "draft") {
+        setDraftModal(true);
       }
-
-      if (status === "ended") {
-        message.success("求人を終了しました");
-        navigate("/customers/facility");
+      else if (status === "pending") {
+        setSuccessModal(true);
+      }
+      else if (status === "ended") {
+        setEndModal(false);
+        setEnd2Modal(true);
       }
     } catch (error) {
       message.error("エラーが発生しました");
@@ -615,13 +622,30 @@ const JobPostEdit = () => {
         `${import.meta.env.VITE_APP_API_URL}/api/v1/jobpost/${jobPostId}`
       );
       if (response.data.error) message.error(response.data.error);
-      message.success("求人を削除しました");
-      navigate("/customers/facility");
+      //message.success("求人を削除しました");
+      setDeleteModal(false);
+      setDelete2Modal(true);
     } catch (error) {
       message.error("エラーが発生しました");
     } finally {
       setLoading(false);
     }
+  };
+
+  const onCloseEndModal = async () => {
+    setEndModal(false);
+  };
+  const onCloseEnd2Modal = async () => {
+    setEnd2Modal(false);
+    navigate("/customers/facility");
+  };
+
+  const onCloseDeleteModal = async () => {
+    setDeleteModal(false);
+  };
+  const onCloseDelete2Modal = async () => {
+    setDelete2Modal(false);
+    navigate("/customers/facility");
   };
 
   useEffect(() => {
@@ -1006,7 +1030,7 @@ const JobPostEdit = () => {
             <>
               <button
                 className="lg:text-base md:text-sm text-xs text-[#FF2A3B] hover:text-white bg-[#ffdbdb] hover:bg-red-500 rounded-lg px-4 py-3 duration-300"
-                onClick={handleSave}
+                onClick={() => handleRequest("draft")}
               >
                 下書き保存
               </button>
@@ -1018,7 +1042,7 @@ const JobPostEdit = () => {
               </button>
               <button
                 className="lg:text-base md:text-sm text-xs text-[#FF2A3B] hover:text-white bg-[#ffdbdb] hover:bg-red-500 rounded-lg px-4 py-3 duration-300"
-                onClick={handleDelete}
+                onClick={() => setDeleteModal(true)}
               >
                 求人を削除する
               </button>
@@ -1028,13 +1052,13 @@ const JobPostEdit = () => {
             <>
               <button
                 className="lg:text-base md:text-sm text-xs text-[#FF2A3B] hover:text-white bg-[#ffdbdb] hover:bg-red-500 rounded-lg px-4 py-3 duration-300"
-                onClick={handleSave}
+                onClick={() => handleRequest("draft")}
               >
                 下書き保存
               </button>
               <button
                 className="lg:text-base md:text-sm text-xs text-[#FF2A3B] hover:text-white bg-[#ffdbdb] hover:bg-red-500 rounded-lg px-4 py-3 duration-300"
-                onClick={handleDelete}
+                onClick={() => setDeleteModal(true)}
               >
                 求人を削除する
               </button>
@@ -1050,13 +1074,13 @@ const JobPostEdit = () => {
               </button>
               <button
                 className="lg:text-base md:text-sm text-xs text-[#FF2A3B] hover:text-white bg-[#ffdbdb] hover:bg-red-500 rounded-lg px-4 py-3 duration-300"
-                onClick={() => handleRequest("ended")}
+                onClick={() => setEndModal(true)}
               >
                 求人を終了する
               </button>
               <button
                 className="lg:text-base md:text-sm text-xs text-[#FF2A3B] hover:text-white bg-[#ffdbdb] hover:bg-red-500 rounded-lg px-4 py-3 duration-300"
-                onClick={handleDelete}
+                onClick={() => setDeleteModal(true)}
               >
                 求人を削除する
               </button>
@@ -1072,7 +1096,7 @@ const JobPostEdit = () => {
               </button>
               <button
                 className="lg:text-base md:text-sm text-xs text-[#FF2A3B] hover:text-white bg-[#ffdbdb] hover:bg-red-500 rounded-lg px-4 py-3 duration-300"
-                onClick={handleDelete}
+                onClick={() => setDeleteModal(true)}
               >
                 求人を削除する
               </button>
@@ -1082,21 +1106,18 @@ const JobPostEdit = () => {
       </div>
 
       <Modal
-        open={successModalOpen}
-        onCancel={() => setSuccessModalOpen(false)}
+        open={draftModal}
+        onCancel={() => setDraftModal(false)}
         footer={null}
         width={600}
         className="modal"
       >
         <div className="flex flex-col">
           <p className="text-lg font-bold text-[#343434] pl-4">
-            求人の掲載申請が完了しました。
+            求人情報を下書き保存しました。
           </p>
           <p className="text-sm text-[#343434] mt-4">
-            ※内容の確認と公開までに即日～2営業日程度かかる場合がございます。
-          </p>
-          <p className="text-sm text-[#343434]">
-            ※掲載された内容を事務局により修正される場合がございます。
+            再開する場合は、求人編集から再開してください。
           </p>
           <Link
             to="/customers/facility"
@@ -1104,6 +1125,121 @@ const JobPostEdit = () => {
           >
             求人一覧へ戻る
           </Link>
+        </div>
+      </Modal>
+
+      <Modal
+        open={successModal}
+        onCancel={() => setSuccessModal(false)}
+        footer={null}
+        width={600}
+        className="modal"
+      >
+        <div className="flex flex-col">
+          <p className="text-lg font-bold text-[#343434] pl-4">
+            求人の掲載申請を行いました。
+          </p>
+          <p className="text-sm text-[#343434] mt-4">
+            ジョブジョブ運営事務局での内容確認後の1～2営業日で求人情報を公開致します。
+          </p>
+          <Link
+            to="/customers/facility"
+            className="text-center text-blue-500 mt-4"
+          >
+            求人一覧へ戻る
+          </Link>
+        </div>
+      </Modal>
+
+      <Modal
+        open={endModal}
+        onCancel={onCloseEndModal}
+        footer={null}
+      >
+        <h1 className="lg:text-2 md:text-base text-sm font-bold">求人の掲載終了</h1>
+        <div className="flex flex-col p-4">
+          <p>求人を掲載終了すると非公開となります。</p>
+        </div>
+        <div className="flex items-center justify-center w-full mt-2">
+          <button
+            onClick={() => handleRequest("ended")}
+            className="lg:text-base md:text-sm text-xs text-[#2A3BFF] hover:text-white bg-[#bbd0ff] hover:bg-blue-500 rounded-lg px-3 py-2 duration-300"
+          >
+            掲載を終了する
+          </button>
+        </div>
+        <div className="flex items-center justify-center w-full mt-2">
+          <button
+            onClick={() => onCloseEndModal()}
+            className="lg:text-base md:text-sm text-xs text-[#2A3BFF] hover:text-white bg-[#bbd0ff] hover:bg-blue-500 rounded-lg px-3 py-2 duration-300"
+          >
+            &emsp;&emsp;閉じる&emsp;&emsp;
+          </button>
+        </div>
+      </Modal>
+      <Modal
+        open={end2Modal}
+        onCancel={onCloseEnd2Modal}
+        footer={null}
+        className="modal"
+      >
+        <h1 className="lg:text-2 md:text-base text-sm font-bold">求人の掲載終了</h1>
+        <div className="flex flex-col p-4">
+          <p>求人の掲載を終了しました。</p>
+          <p>再度掲載される場合は、掲載申請をお願いします。</p>
+        </div>
+        <div className="flex items-center justify-center w-full mt-2">
+          <button
+            onClick={() => onCloseEnd2Modal()}
+            className="lg:text-base md:text-sm text-xs text-[#2A3BFF] hover:text-white bg-[#bbd0ff] hover:bg-blue-500 rounded-lg px-3 py-2 duration-300"
+          >
+            &emsp;&emsp;閉じる&emsp;&emsp;
+          </button>
+        </div>
+      </Modal>
+
+      <Modal
+        open={deleteModal}
+        onCancel={onCloseDeleteModal}
+        footer={null}
+      >
+        <h1 className="lg:text-2 md:text-base text-sm font-bold">求人の削除</h1>
+        <div className="flex flex-col p-4">
+          <p>削除すると元には戻せません。</p>
+        </div>
+        <div className="flex items-center justify-center w-full mt-2">
+          <button
+            onClick={() => handleDelete()}
+            className="lg:text-base md:text-sm text-xs text-[#2A3BFF] hover:text-white bg-[#bbd0ff] hover:bg-blue-500 rounded-lg px-3 py-2 duration-300"
+          >
+            求人を削除する
+          </button>
+        </div>
+        <div className="flex items-center justify-center w-full mt-2">
+          <button
+            onClick={() => onCloseDeleteModal()}
+            className="lg:text-base md:text-sm text-xs text-[#2A3BFF] hover:text-white bg-[#bbd0ff] hover:bg-blue-500 rounded-lg px-3 py-2 duration-300"
+          >
+            &emsp;&emsp;閉じる&emsp;&emsp;
+          </button>
+        </div>
+      </Modal>
+      <Modal
+        open={delete2Modal}
+        onCancel={onCloseDelete2Modal}
+        footer={null}
+      >
+        <h1 className="lg:text-2 md:text-base text-sm font-bold">求人の削除</h1>
+        <div className="flex flex-col p-4">
+          <p>求人を削除しました。</p>
+        </div>
+        <div className="flex items-center justify-center w-full mt-2">
+          <button
+            onClick={() => onCloseDelete2Modal()}
+            className="lg:text-base md:text-sm text-xs text-[#2A3BFF] hover:text-white bg-[#bbd0ff] hover:bg-blue-500 rounded-lg px-3 py-2 duration-300"
+          >
+            &emsp;&emsp;閉じる&emsp;&emsp;
+          </button>
         </div>
       </Modal>
 
