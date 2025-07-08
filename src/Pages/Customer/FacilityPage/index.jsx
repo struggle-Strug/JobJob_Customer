@@ -4,6 +4,8 @@ import { message, Pagination, Spin } from "antd";
 import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-hot-toast";
+
 import FacilityDetail from "./FacilityDetail";
 import { useAuth } from "../../../context/AuthContext.jsx";
 import { PlusCircleOutlined } from "@ant-design/icons";
@@ -29,7 +31,7 @@ const FacilityPage = () => {
       );
 
       if (response.data.error) {
-        message.error(response.data.message || "施設情報の取得に失敗しました");
+        toast.error(response.data.message || "施設情報の取得に失敗しました");
         return;
       }
       if (response.data.isAuthError) return;
@@ -46,7 +48,7 @@ const FacilityPage = () => {
     } catch (error) {
       if (error.status != 401) {
         console.error("Error fetching facilities:", error);
-        message.error("施設情報の取得中にエラーが発生しました");
+        toast.error("施設情報の取得中にエラーが発生しました");
       }
     } finally {
       setLoading(false);
@@ -71,9 +73,7 @@ const FacilityPage = () => {
         );
 
         if (response.data.error) {
-          message.error(
-            response.data.message || "求人情報の取得に失敗しました"
-          );
+          toast.error(response.data.message || "求人情報の取得に失敗しました");
           return;
         }
         if (response.data.isAuthError) return;
@@ -86,7 +86,7 @@ const FacilityPage = () => {
       } catch (error) {
         if (error.status != 401) {
           console.error("Error fetching job posts:", error);
-          message.error("求人情報の取得中にエラーが発生しました");
+          toast.error("求人情報の取得中にエラーが発生しました");
         }
       }
     },
@@ -105,9 +105,7 @@ const FacilityPage = () => {
         );
 
         if (response.data.error) {
-          message.error(
-            response.data.message || "施設詳細の取得に失敗しました"
-          );
+          toast.error(response.data.message || "施設詳細の取得に失敗しました");
           return;
         }
         if (response.data.isAuthError) return;
@@ -116,7 +114,7 @@ const FacilityPage = () => {
       } catch (error) {
         if (error.status != 401) {
           console.error("Error fetching facility details:", error);
-          message.error("施設詳細の取得中にエラーが発生しました");
+          toast.error("施設詳細の取得中にエラーが発生しました");
         }
       } finally {
         setLoadingDetail(false);

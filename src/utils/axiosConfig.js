@@ -1,5 +1,5 @@
 import axios from "axios";
-import { message } from "antd";
+import { toast } from "react-hot-toast";
 
 // Create a function to set up the axios interceptors
 export const setupAxiosInterceptors = (navigate, setIsAuthenticated) => {
@@ -27,18 +27,20 @@ export const setupAxiosInterceptors = (navigate, setIsAuthenticated) => {
           setIsAuthenticated(false);
 
           // Show message to user
-          message.error(
-            "セッションの有効期限が切れました。再度ログインしてください。"
-          );
+          // toast.error(
+          //   "セッションの有効期限が切れました。再度ログインしてください。"
+          // );
 
           // Redirect to login page
-          if (window.location.pathname.startsWith("/members")) navigate("/");
-          else if (window.location.pathname.startsWith("/customers")) navigate("/customers/sign_in");
-          else navigate("/");
+          if (window.location.pathname.startsWith("/customers"))
+            navigate("/customers/sign_in");
+          else navigate("/customers/sign_in");
 
           // Return a resolved promise to prevent the error from propagating
           // This is the key to preventing the red error screen
-          return Promise.resolve({ data: { success: false, isAuthError: true } });
+          return Promise.resolve({
+            data: { success: false, isAuthError: true },
+          });
         }
       }
 

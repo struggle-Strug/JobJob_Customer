@@ -1,5 +1,7 @@
 import { Helmet } from "react-helmet";
 import { CloseOutlined, PlusOutlined } from "@ant-design/icons";
+import { toast } from "react-hot-toast";
+
 import {
   Button,
   Checkbox,
@@ -317,7 +319,7 @@ const JobPostEdit = () => {
 
     // Check if adding this would exceed the limit
     if (jobPostPicture.length >= 10) {
-      message.error("最大10枚までしか選択できません");
+      toast.error("最大10枚までしか選択できません");
       return;
     }
 
@@ -358,11 +360,11 @@ const JobPostEdit = () => {
             },
           }
         );
-        //("写真のアップロードが完了しました");
+        toast.success("写真のアップロードが完了しました");
         uploadedFileUrls = response.data.files.map((item) => item.fileUrl);
         uploadedFiles = response.data.files;
       } catch (error) {
-        message.error("写真アップロード失敗");
+        toast.error("写真アップロード失敗");
         return { fileUrls: [], files: [] };
       }
     }
@@ -484,48 +486,48 @@ const JobPostEdit = () => {
     try {
       // バリデーションチェック（失敗した場合は早期リターン）
       if (jobPostTypeDetail === "")
-        return message.error("募集職種を選択してください。");
+        return toast.error("募集職種を選択してください。");
       if (jobPostSubTitle === "")
-        return message.error("訴求文タイトルを入力してください。");
+        return toast.error("訴求文タイトルを入力してください。");
       if (jobPostSubDescription === "")
-        return message.error("訴求文を入力してください。");
+        return toast.error("訴求文を入力してください。");
       if (jobPostWorkItem.length === 0)
-        return message.error("仕事内容を選択してください。");
+        return toast.error("仕事内容を選択してください。");
       if (jobPostWorkContent === "")
-        return message.error("仕事内容を入力してください。");
+        return toast.error("仕事内容を入力してください。");
       if (jobPostEmploymentType.length === 0)
-        return message.error("雇用形態を選択してください。");
+        return toast.error("雇用形態を選択してください。");
       if (jobPostSalaryType === "")
-        return message.error("給与体系を入力してください。");
+        return toast.error("給与体系を入力してください。");
       if (jobPostSalaryMin === 0 || jobPostSalaryMax === 0)
-        return message.error("給与下限・上限を入力してください。");
+        return toast.error("給与下限・上限を入力してください。");
       // if (
       //   isNaN(jobPostSalaryMin) ||
       //   isNaN(jobPostSalaryMax) ||
       //   isNaN(jobPostExpectedIncome)
       // )
-      //   return message.error(
+      //   return toast.error(
       //     "給与下限・上限、想定年収を正しく入力してください。"
       //   );
       // Replace these lines:
       // if (jobPostWorkTimeContent === "")
-      //   return message.error("勤務時間・休憩時間を入力してください。");
+      //   return toast.error("勤務時間・休憩時間を入力してください。");
       // if (jobPostRestContent === "")
-      //   return message.error("休日を入力してください。");
+      //   return toast.error("休日を入力してください。");
       // if (jobPostQualificationType.length === 0)
-      //   return message.error("応募要件（資格）を選択してください。");
+      //   return toast.error("応募要件（資格）を選択してください。");
 
       // With these lines:
       if (jobPostWorkTimeType.length === 0 && jobPostWorkTimeContent === "")
-        return message.error(
+        return toast.error(
           "勤務時間・休憩時間（選択またはテキスト）を入力してください。"
         );
       if (jobPostRestType.length === 0 && jobPostRestContent === "")
-        return message.error("休日（選択またはテキスト）を入力してください。");
+        return toast.error("休日（選択またはテキスト）を入力してください。");
       if (jobPostQualificationContent === "")
-        return message.error("応募要件を入力してください。");
+        return toast.error("応募要件を入力してください。");
       if (jobPostProcess === "")
-        return message.error("選考プロセスを入力してください。");
+        return toast.error("選考プロセスを入力してください。");
 
       const uploadResult = await handleUpload();
       const newUrls = uploadResult.fileUrls || [];
@@ -577,9 +579,9 @@ const JobPostEdit = () => {
         `${import.meta.env.VITE_APP_API_URL}/api/v1/jobpost/${jobPostId}`,
         JobPostData
       );
-      if (response.data.error) message.error(response.data.error);
-      //else message.success("求人を更新しました");
-      //navigate("/customers/facility");
+      if (response.data.error) toast.error(response.data.error);
+      else toast.success("求人を更新しました");
+      navigate("/customers/facility");
     } catch (error) {
       console.error("Error updating job post:", error);
     } finally {
@@ -596,20 +598,20 @@ const JobPostEdit = () => {
           import.meta.env.VITE_APP_API_URL
         }/api/v1/jobpost/${jobPostId}/${status}`
       );
-      if (response.data.error) message.error(response.data.error);
+      if (response.data.error) toast.error(response.data.error);
 
       if (status === "draft") {
         setDraftModal(true);
-      }
-      else if (status === "pending") {
+      } else if (status === "pending") {
         setSuccessModal(true);
       }
-      else if (status === "ended") {
-        setEndModal(false);
-        setEnd2Modal(true);
+
+      if (status === "ended") {
+        toast.success("求人を終了しました");
+        navigate("/customers/facility");
       }
     } catch (error) {
-      message.error("エラーが発生しました");
+      toast.error("エラーが発生しました");
     } finally {
       setLoading(false);
     }
@@ -621,12 +623,11 @@ const JobPostEdit = () => {
       const response = await axios.delete(
         `${import.meta.env.VITE_APP_API_URL}/api/v1/jobpost/${jobPostId}`
       );
-      if (response.data.error) message.error(response.data.error);
-      //message.success("求人を削除しました");
-      setDeleteModal(false);
-      setDelete2Modal(true);
+      if (response.data.error) toast.error(response.data.error);
+      toast.success("求人を削除しました");
+      navigate("/customers/facility");
     } catch (error) {
-      message.error("エラーが発生しました");
+      toast.error("エラーが発生しました");
     } finally {
       setLoading(false);
     }
@@ -720,7 +721,7 @@ const JobPostEdit = () => {
                     if (file) {
                       // Check file size (limit to 5MB)
                       if (file.size > 5 * 1024 * 1024) {
-                        message.error("ファイルサイズは5MB以下にしてください");
+                        toast.error("ファイルサイズは5MB以下にしてください");
                         return;
                       }
 
@@ -735,7 +736,7 @@ const JobPostEdit = () => {
                         })
                         .catch((error) => {
                           console.error("File processing error:", error);
-                          message.error("ファイル処理中にエラーが発生しました");
+                          toast.error("ファイル処理中にエラーが発生しました");
                         });
                     }
                   };
@@ -1151,12 +1152,10 @@ const JobPostEdit = () => {
         </div>
       </Modal>
 
-      <Modal
-        open={endModal}
-        onCancel={onCloseEndModal}
-        footer={null}
-      >
-        <h1 className="lg:text-2 md:text-base text-sm font-bold">求人の掲載終了</h1>
+      <Modal open={endModal} onCancel={onCloseEndModal} footer={null}>
+        <h1 className="lg:text-2 md:text-base text-sm font-bold">
+          求人の掲載終了
+        </h1>
         <div className="flex flex-col p-4">
           <p>求人を掲載終了すると非公開となります。</p>
         </div>
@@ -1183,7 +1182,9 @@ const JobPostEdit = () => {
         footer={null}
         className="modal"
       >
-        <h1 className="lg:text-2 md:text-base text-sm font-bold">求人の掲載終了</h1>
+        <h1 className="lg:text-2 md:text-base text-sm font-bold">
+          求人の掲載終了
+        </h1>
         <div className="flex flex-col p-4">
           <p>求人の掲載を終了しました。</p>
           <p>再度掲載される場合は、掲載申請をお願いします。</p>
@@ -1198,11 +1199,7 @@ const JobPostEdit = () => {
         </div>
       </Modal>
 
-      <Modal
-        open={deleteModal}
-        onCancel={onCloseDeleteModal}
-        footer={null}
-      >
+      <Modal open={deleteModal} onCancel={onCloseDeleteModal} footer={null}>
         <h1 className="lg:text-2 md:text-base text-sm font-bold">求人の削除</h1>
         <div className="flex flex-col p-4">
           <p>削除すると元には戻せません。</p>
@@ -1224,11 +1221,7 @@ const JobPostEdit = () => {
           </button>
         </div>
       </Modal>
-      <Modal
-        open={delete2Modal}
-        onCancel={onCloseDelete2Modal}
-        footer={null}
-      >
+      <Modal open={delete2Modal} onCancel={onCloseDelete2Modal} footer={null}>
         <h1 className="lg:text-2 md:text-base text-sm font-bold">求人の削除</h1>
         <div className="flex flex-col p-4">
           <p>求人を削除しました。</p>
@@ -1266,7 +1259,7 @@ const JobPostEdit = () => {
           // 既存の写真と合わせた枚数チェック
           const totalPhotos = jobPostPicture.length + formattedPhotos.length;
           if (totalPhotos > 10) {
-            message.error("最大10枚までしか選択できません");
+            toast.error("最大10枚までしか選択できません");
             return;
           }
           setJobPostPicture((prev) => [...prev, ...formattedPhotos]);

@@ -8,6 +8,8 @@ import MemberDetailModal from "../ProcessManagementPage/MemberDetailModal";
 import { Button, Upload, message as Message, Spin, Tooltip } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { GoPaperclip } from "react-icons/go";
+import { toast } from "react-hot-toast";
+
 import { IoRefreshOutline } from "react-icons/io5";
 import moment from "moment";
 
@@ -36,7 +38,7 @@ const MessageDetails = ({ id, onMessageSent, onMessageRead }) => {
           `${import.meta.env.VITE_APP_API_URL}/api/v1/message/company/${id}`
         );
         if (res.data.error) {
-          Message.error(res.data.message);
+          toast.error(res.data.message);
           return;
         }
 
@@ -56,7 +58,7 @@ const MessageDetails = ({ id, onMessageSent, onMessageRead }) => {
           }
         }
       } catch (error) {
-        Message.error("メッセージの取得に失敗しました");
+        toast.error("メッセージの取得に失敗しました");
         console.error("Error fetching message details:", error);
       } finally {
         setIsLoading(false);
@@ -71,7 +73,7 @@ const MessageDetails = ({ id, onMessageSent, onMessageRead }) => {
     if (onMessageSent) {
       onMessageSent();
     }
-    Message.success("メッセージを更新しました");
+    toast.success("メッセージを更新しました");
   };
 
   const markMessageAsRead = async (messageToMark) => {
@@ -134,10 +136,10 @@ const MessageDetails = ({ id, onMessageSent, onMessageRead }) => {
           },
         }
       );
-      Message.success("ファイルアップロード成功!");
+      toast.success("ファイルアップロード成功!");
       return response.data.files;
     } catch (error) {
-      Message.error("ファイルアップロードに失敗しました");
+      toast.error("ファイルアップロードに失敗しました");
       console.error("Upload error:", error);
       return [];
     }
@@ -145,7 +147,7 @@ const MessageDetails = ({ id, onMessageSent, onMessageRead }) => {
 
   const sendMessage = async () => {
     if (!content.trim() && fileList.length === 0) {
-      Message.warning("メッセージまたはファイルを追加してください");
+      toast.warning("メッセージまたはファイルを追加してください");
       return;
     }
 
@@ -155,7 +157,7 @@ const MessageDetails = ({ id, onMessageSent, onMessageRead }) => {
       const messageData = {
         message_id: message?.message_id,
         message: content,
-        sender: message.second,
+        sender: toast.second,
         recevier: message?.first,
         files: files || [],
       };
@@ -166,11 +168,11 @@ const MessageDetails = ({ id, onMessageSent, onMessageRead }) => {
       );
 
       if (res.data.error) {
-        Message.error(res.data.message);
+        toast.error(res.data.message);
         return;
       }
 
-      Message.success("メッセージを送信しました");
+      toast.success("メッセージを送信しました");
       setFileList([]);
       setContent("");
 
@@ -182,7 +184,7 @@ const MessageDetails = ({ id, onMessageSent, onMessageRead }) => {
         onMessageSent();
       }
     } catch (error) {
-      Message.error("メッセージの送信に失敗しました");
+      toast.error("メッセージの送信に失敗しました");
       console.error("Send message error:", error);
     } finally {
       setIsSending(false);
@@ -269,8 +271,8 @@ const MessageDetails = ({ id, onMessageSent, onMessageRead }) => {
           <div className="flex items-center gap-3">
             {message?.jobPost_id && (
               <Link
-                to={`/${getJobValueByKey(message.jobpost_id?.type)}/${
-                  message.jobPost_id
+                to={`/${getJobValueByKey(toast.jobpost_id?.type)}/${
+                  toast.jobPost_id
                 }`}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -301,7 +303,7 @@ const MessageDetails = ({ id, onMessageSent, onMessageRead }) => {
               <div
                 key={index}
                 className={`flex flex-col ${
-                  contentMessage.sender === message.first
+                  contenttoast.sender === toast.first
                     ? "items-start"
                     : "items-end"
                 }`}
@@ -309,22 +311,21 @@ const MessageDetails = ({ id, onMessageSent, onMessageRead }) => {
                 <div className="flex flex-col max-w-[70%]">
                   <div
                     className={`rounded-lg ${
-                      contentMessage.sender === message.first
+                      contenttoast.sender === toast.first
                         ? "bg-gray-100 text-gray-800"
                         : "bg-blue-50 text-gray-800"
                     }`}
                   >
-                    {contentMessage?.message &&
-                      contentMessage.message !== "" && (
-                        <pre className="text-sm p-4 leading-relaxed whitespace-pre-wrap break-words">
-                          {contentMessage.message}
-                        </pre>
-                      )}
+                    {contentMessage?.message && contenttoast.message !== "" && (
+                      <pre className="text-sm p-4 leading-relaxed whitespace-pre-wrap break-words">
+                        {contenttoast.message}
+                      </pre>
+                    )}
                   </div>
 
-                  {contentMessage?.files && contentMessage.files.length > 0 && (
+                  {contentMessage?.files && contenttoast.files.length > 0 && (
                     <div className="flex flex-col gap-1 mt-2 ml-1">
-                      {contentMessage.files.map((file, fileIndex) => (
+                      {contenttoast.files.map((file, fileIndex) => (
                         <Link
                           key={fileIndex}
                           to={`${
@@ -343,8 +344,8 @@ const MessageDetails = ({ id, onMessageSent, onMessageRead }) => {
                   )}
 
                   <div className="text-xs text-gray-500 mt-1 ml-1">
-                    {contentMessage.date &&
-                      moment(contentMessage.date).format("YYYY/MM/DD HH:mm")}
+                    {contenttoast.date &&
+                      moment(contenttoast.date).format("YYYY/MM/DD HH:mm")}
                   </div>
                 </div>
               </div>
@@ -397,7 +398,7 @@ const MessageDetails = ({ id, onMessageSent, onMessageRead }) => {
         <MemberDetailModal
           open={userProfileModal}
           onCancel={() => setUserProfileModal(false)}
-          memberData={message.user_id}
+          memberData={toast.user_id}
         />
       )}
     </div>

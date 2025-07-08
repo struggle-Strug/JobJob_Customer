@@ -8,6 +8,7 @@ import {
 import App from "./App.jsx";
 import { AuthProvider } from "./context/AuthContext.jsx";
 import "./index.css";
+import "antd/dist/reset.css";
 
 const Layout = () => {
   return (
