@@ -24,10 +24,14 @@ const PhotoManagement = () => {
 
   const handleChange = (info) => {
     // Provide feedback on upload status
-    let updatedFileList = info.fileList.filter((file) => {
+    let updatedFileList = info.fileList.filter((file, index) => {
       // Check file size (limit to 5MB)
       if (file.size > 5 * 1024 * 1024) {
         message.error("ファイルサイズは5MB以下にしてください");
+        return false;
+      }
+      if (index >= 10) {
+        message.error("最大10枚までしかアップロードできません");
         return false;
       }
 
