@@ -257,8 +257,8 @@ const FacilityAdd = () => {
   };
 
   const handleSave = async () => {
-    setLoading(true);
     try {
+      setLoading(true);
       // Validate required fields first
       if (facilityName === "")
         return message.error("施設名を入力してください。");

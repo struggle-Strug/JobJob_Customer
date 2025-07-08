@@ -4,6 +4,7 @@ import { Button, message, Tooltip, Upload } from "antd";
 import axios from "axios";
 import DescriptionChangeModal from "./DescriptionChangeModal";
 import { Helmet } from "react-helmet";
+import Loading from "../../../components/Loading";
 const { Dragger } = Upload;
 
 const PhotoManagement = () => {
@@ -13,6 +14,9 @@ const PhotoManagement = () => {
   const [descriptionModalOpen, setDescriptionModalOpen] = useState(false);
   const [description, setDescription] = useState("");
   const [selectedPhoto, setSelectedPhoto] = useState("");
+
+  // ローディング状態
+  const [loading, setLoading] = useState(false);
 
   const beforeUpload = () => {
     return false;
@@ -42,15 +46,15 @@ const PhotoManagement = () => {
     if (fileList.length === 0) {
       return;
     }
-
-    const formData = new FormData();
-
-    // Append multiple files
-    fileList.forEach((file) => {
-      formData.append("files", file.originFileObj); // Ensure correct file object
-    });
-
     try {
+      setLoading(true);
+      const formData = new FormData();
+
+      // Append multiple files
+      fileList.forEach((file) => {
+        formData.append("files", file.originFileObj); // Ensure correct file object
+      });
+
       const response = await axios.post(
         `${import.meta.env.VITE_APP_API_URL}/api/v1/file/multi`,
         formData,
@@ -65,6 +69,8 @@ const PhotoManagement = () => {
       return response.data.files; // Assuming API returns an array of URLs
     } catch (error) {
       message.error("ファイルアップロードに失敗しました");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -168,6 +174,7 @@ const PhotoManagement = () => {
         <title>写真管理 | JobJob (ジョブジョブ)</title>
         <meta name="robots" content="noindex, nofollow" />
       </Helmet>
+      {loading ? <Loading /> : <></>}
       <div className="w-full min-h-screen">
         <div className="flex flex-col w-full bg-white rounded-lg shadow-xl min-h-screen">
           <p className="text-left lg:text-xl md:text-base text-sm font-bold text-[#343434] p-4">
