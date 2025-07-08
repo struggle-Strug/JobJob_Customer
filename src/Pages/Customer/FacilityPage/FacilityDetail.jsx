@@ -59,7 +59,7 @@ const FacilityDetail = ({ facility, jobPosts, setJobPosts }) => {
     () =>
       companyFacilities?.map((facility) => ({
         value: facility.facility_id,
-        label: facility.name,
+        label: `${facility.name}`,
       })),
     [companyFacilities]
   );
@@ -68,7 +68,7 @@ const FacilityDetail = ({ facility, jobPosts, setJobPosts }) => {
     () =>
       selectedJobPosts?.map((jobPost) => ({
         value: jobPost.jobpost_id,
-        label: jobPost.sub_title,
+        label: `${jobPost.type}・${jobPost.employment_type[0]}・${jobPost.sub_title}`,
       })),
     [selectedJobPosts]
   );
@@ -166,7 +166,7 @@ const FacilityDetail = ({ facility, jobPosts, setJobPosts }) => {
       setSelectedJobPostId("");
 
       // Add the new job post to the beginning of the list
-      setJobPosts((prev) => [response.data.jobpost, ...prev]);
+      setJobPosts((prev) => [response.data.jobPost, ...prev]);
     } catch (error) {
       console.error("Error copying job post:", error);
       toast.error("求人のコピー中にエラーが発生しました");
@@ -231,7 +231,7 @@ const FacilityDetail = ({ facility, jobPosts, setJobPosts }) => {
         />
       );
 
-    return facility.photos.length === 0 ? (
+    return facility.photos?.length === 0 ? (
       <img
         src="/assets/images/noimage.png"
         alt={facility.name}
@@ -260,16 +260,16 @@ const FacilityDetail = ({ facility, jobPosts, setJobPosts }) => {
         />
       );
 
-    return jobPost.photos.length === 0 ? (
+    return !jobPost.photos || jobPost.photos?.length === 0 ? (
       <img
         src="/assets/images/noimage.png"
-        alt={jobPost.sub_title}
+        alt={`${jobPost?.facility?.name || ""}の${jobPost?.type || ""}求人(${jobPost?.employment_type || ""})`}
         className="w-full h-24 object-cover rounded-lg"
       />
     ) : (
       <img
-        src={jobPost.photos[0].url || "/placeholder.svg"}
-        alt={jobPost.sub_title}
+        src={jobPost?.photos[0].url || "/placeholder.svg"}
+        alt={`${jobPost?.facility?.name || ""}の${jobPost?.type || ""}求人(${jobPost?.employment_type || ""})の写真1枚目${(jobPost?.photos[0].description) ? ("：" + jobPost?.photos[0].description) : ""}`}
         className={`w-full h-24 object-${
           93 / 96 < jobPost.photos[0].width / jobPost.photos[0].height
             ? "cover"

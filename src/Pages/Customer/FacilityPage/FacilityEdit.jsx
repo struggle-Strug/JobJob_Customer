@@ -62,10 +62,13 @@ const FacilityEdit = () => {
   const [facilityServiceTime, setFacilityServiceTime] = useState("");
   const [facilityRestDay, setFacilityRestDay] = useState("");
   const [jobPosts, setJobPosts] = useState([]);
-  const [successModalOpen, setSuccessModalOpen] = useState(false);
   const [previewModal, setPreviewModal] = useState(false);
   const [loading, setLoading] = useState(true); // Add loading state
+  const [successModal, setSuccessModal] = useState(false);
   const [endModal, setEndModal] = useState(false);
+  const [end2Modal, setEnd2Modal] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [delete2Modal, setDelete2Modal] = useState(false);
   const location = useLocation();
   const id = location.pathname.split("/").pop();
   const navigate = useNavigate();
@@ -78,7 +81,6 @@ const FacilityEdit = () => {
     width: "80%",
   };
 
-  const [saveLoading, setSaveLoading] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
   const carouselRef = useRef();
 
@@ -146,7 +148,18 @@ const FacilityEdit = () => {
   ];
 
   const onCloseEndModal = async () => {
-    await setEndModal(false);
+    setEndModal(false);
+  };
+  const onCloseEnd2Modal = async () => {
+    setEnd2Modal(false);
+    navigate("/customers/facility");
+  };
+
+  const onCloseDeleteModal = async () => {
+    setDeleteModal(false);
+  };
+  const onCloseDelete2Modal = async () => {
+    setDelete2Modal(false);
     navigate("/customers/facility");
   };
 
@@ -321,8 +334,8 @@ const FacilityEdit = () => {
 
   // 施設編集の保存処理
   const handleSave = async () => {
-    setSaveLoading(true);
     try {
+      setLoading(true);
       // Validate required fields first
       if (facilityName === "") {
         return toast.error("施設名を入力してください。");
@@ -456,7 +469,7 @@ const FacilityEdit = () => {
         }`
       );
     } finally {
-      setSaveLoading(false);
+      setLoading(false);
     }
   };
 
@@ -466,18 +479,28 @@ const FacilityEdit = () => {
     );
     if (response.data.error) toast.error(response.data.error);
     if (response.data.isAuthError) return;
-    if (status === "ended") return setEndModal(true);
-    navigate(`/customers/facility`);
+    if (status === "ended") {
+      setEndModal(false);
+      setEnd2Modal(true);
+    }
   };
 
   const handleDeleteFacility = async () => {
-    const response = await axios.delete(
-      `${import.meta.env.VITE_APP_API_URL}/api/v1/facility/${id}`
-    );
-    if (response.data.error) return toast.error(response.data.error);
-    if (response.data.isAuthError) return;
-    toast.success("削除成功");
-    navigate("/customers/facility");
+    try {
+      setLoading(true);
+      const response = await axios.delete(
+        `${import.meta.env.VITE_APP_API_URL}/api/v1/facility/${id}`
+      );
+      if (response.data.error) return message.error(response.data.error);
+      if (response.data.isAuthError) return;
+      toast.success("削除成功");
+      setDeleteModal(false);
+      setDelete2Modal(true);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   // Add a function to remove files
@@ -811,7 +834,7 @@ const FacilityEdit = () => {
               </button>
               <button
                 className="lg:text-base md:text-sm text-xs text-[#FF2A3B] hover:text-white bg-[#ffdbdb] hover:bg-red-500 rounded-lg px-4 py-3 duration-300"
-                onClick={handleDeleteFacility}
+                onClick={() => setDeleteModal(true)}
               >
                 削除する
               </button>
@@ -820,7 +843,7 @@ const FacilityEdit = () => {
           {facility?.allowed === "pending" && (
             <button
               className="lg:text-base md:text-sm text-xs text-[#FF2A3B] hover:text-white bg-[#ffdbdb] hover:bg-red-500 rounded-lg px-4 py-3 duration-300"
-              onClick={handleDeleteFacility}
+              onClick={() => setDeleteModal(true)}
             >
               削除する
             </button>
@@ -829,13 +852,19 @@ const FacilityEdit = () => {
             <>
               <button
                 className="lg:text-base md:text-sm text-xs text-[#FF2A3B] hover:text-white bg-[#ffdbdb] hover:bg-red-500 rounded-lg px-4 py-3 duration-300"
-                onClick={() => handleRequest("ended")}
+                onClick={handleSave}
+              >
+                掲載を申請する
+              </button>
+              <button
+                className="lg:text-base md:text-sm text-xs text-[#FF2A3B] hover:text-white bg-[#ffdbdb] hover:bg-red-500 rounded-lg px-4 py-3 duration-300"
+                onClick={() => setEndModal(true)}
               >
                 掲載を終了する
               </button>
               <button
                 className="lg:text-base md:text-sm text-xs text-[#FF2A3B] hover:text-white bg-[#ffdbdb] hover:bg-red-500 rounded-lg px-4 py-3 duration-300"
-                onClick={handleDeleteFacility}
+                onClick={() => setDeleteModal(true)}
               >
                 削除する
               </button>
@@ -852,7 +881,7 @@ const FacilityEdit = () => {
               </button>
               <button
                 className="lg:text-base md:text-sm text-xs text-[#FF2A3B] hover:text-white bg-[#ffdbdb] hover:bg-red-500 rounded-lg px-4 py-3 duration-300"
-                onClick={handleDeleteFacility}
+                onClick={() => setDeleteModal(true)}
               >
                 削除する
               </button>
@@ -860,32 +889,6 @@ const FacilityEdit = () => {
           )}
         </div>
       </div>
-
-      <Modal
-        open={successModalOpen}
-        onCancel={() => setSuccessModalOpen(false)}
-        footer={null}
-        width={600}
-        className="modal"
-      >
-        <div className="flex flex-col">
-          <p className="text-lg font-bold text-[#343434] pl-4">
-            施設の掲載申請が完了しました。
-          </p>
-          <p className="text-sm text-[#343434] mt-4">
-            ※内容の確認と公開までに即日～2営業日程度かかる場合がございます。
-          </p>
-          <p className="text-sm text-[#343434]">
-            ※掲載された内容を事務局により修正される場合がございます。
-          </p>
-          <Link
-            to="/customers/facility"
-            className="text-center text-blue-500 mt-4"
-          >
-            施設一覧へ戻る
-          </Link>
-        </div>
-      </Modal>
 
       <Modal
         open={previewModal}
@@ -1213,21 +1216,115 @@ const FacilityEdit = () => {
       />
 
       <Modal
-        open={endModal}
-        onCancel={onCloseEndModal}
+        open={successModal}
+        onCancel={() => setSuccessModal(false)}
         footer={null}
+        width={600}
         className="modal"
       >
-        <div className="flex flex-col p-4">
+        <div className="flex flex-col">
           <p className="text-lg font-bold text-[#343434] pl-4">
-            施設の掲載を終了しました。再度掲載される場合は、掲載申請をお願いします。
+            施設の掲載申請を行いました。
+          </p>
+          <p className="text-sm text-[#343434] mt-4">
+            ジョブジョブ運営事務局での内容確認後の1～2営業日で施設情報を公開致します。
+          </p>
+          <p className="text-sm text-[#343434]">
+            施設掲載申請中も求人情報の申請は行えますので、続けて求人情報を登録してください。
           </p>
           <Link
             to="/customers/facility"
             className="text-center text-blue-500 mt-4"
           >
-            施設一覧へ戻る
+            求人一覧へ戻る
           </Link>
+        </div>
+      </Modal>
+
+      <Modal open={endModal} onCancel={onCloseEndModal} footer={null}>
+        <h1 className="lg:text-2 md:text-base text-sm font-bold">
+          施設の掲載終了
+        </h1>
+        <div className="flex flex-col p-4">
+          <p>
+            施設を掲載終了すると、施設に登録してある求人情報も掲載終了（非公開）となります。
+          </p>
+        </div>
+        <div className="flex items-center justify-center w-full mt-2">
+          <button
+            onClick={() => handleRequest("ended")}
+            className="lg:text-base md:text-sm text-xs text-[#2A3BFF] hover:text-white bg-[#bbd0ff] hover:bg-blue-500 rounded-lg px-3 py-2 duration-300"
+          >
+            掲載を終了する
+          </button>
+        </div>
+        <div className="flex items-center justify-center w-full mt-2">
+          <button
+            onClick={() => onCloseEndModal()}
+            className="lg:text-base md:text-sm text-xs text-[#2A3BFF] hover:text-white bg-[#bbd0ff] hover:bg-blue-500 rounded-lg px-3 py-2 duration-300"
+          >
+            &emsp;&emsp;閉じる&emsp;&emsp;
+          </button>
+        </div>
+      </Modal>
+      <Modal
+        open={end2Modal}
+        onCancel={onCloseEnd2Modal}
+        footer={null}
+        className="modal"
+      >
+        <h1 className="lg:text-2 md:text-base text-sm font-bold">
+          施設の掲載終了
+        </h1>
+        <div className="flex flex-col p-4">
+          <p>施設の掲載を終了しました。</p>
+          <p>再度掲載される場合は、掲載申請をお願いします。</p>
+        </div>
+        <div className="flex items-center justify-center w-full mt-2">
+          <button
+            onClick={() => onCloseEnd2Modal()}
+            className="lg:text-base md:text-sm text-xs text-[#2A3BFF] hover:text-white bg-[#bbd0ff] hover:bg-blue-500 rounded-lg px-3 py-2 duration-300"
+          >
+            &emsp;&emsp;閉じる&emsp;&emsp;
+          </button>
+        </div>
+      </Modal>
+
+      <Modal open={deleteModal} onCancel={onCloseDeleteModal} footer={null}>
+        <h1 className="lg:text-2 md:text-base text-sm font-bold">施設の削除</h1>
+        <div className="flex flex-col p-4">
+          <p>削除すると元には戻せません。</p>
+          <p>また、施設に登録してある求人情報も全て削除されます。</p>
+        </div>
+        <div className="flex items-center justify-center w-full mt-2">
+          <button
+            onClick={() => handleDeleteFacility()}
+            className="lg:text-base md:text-sm text-xs text-[#2A3BFF] hover:text-white bg-[#bbd0ff] hover:bg-blue-500 rounded-lg px-3 py-2 duration-300"
+          >
+            施設を削除する
+          </button>
+        </div>
+        <div className="flex items-center justify-center w-full mt-2">
+          <button
+            onClick={() => onCloseDeleteModal()}
+            className="lg:text-base md:text-sm text-xs text-[#2A3BFF] hover:text-white bg-[#bbd0ff] hover:bg-blue-500 rounded-lg px-3 py-2 duration-300"
+          >
+            &emsp;&emsp;閉じる&emsp;&emsp;
+          </button>
+        </div>
+      </Modal>
+      <Modal open={delete2Modal} onCancel={onCloseDelete2Modal} footer={null}>
+        <h1 className="lg:text-2 md:text-base text-sm font-bold">施設の削除</h1>
+        <div className="flex flex-col p-4">
+          <p>施設を削除しました。</p>
+        </div>
+        <div className="flex items-center justify-center w-full mt-2">
+          <button
+            onClick={() => onCloseDelete2Modal()}
+            className="lg:text-base md:text-sm text-xs text-[#2A3BFF] hover:text-white bg-[#bbd0ff] hover:bg-blue-500 rounded-lg px-3 py-2 duration-300"
+          >
+            &emsp;&emsp;閉じる&emsp;&emsp;
+          </button>
         </div>
       </Modal>
     </>
