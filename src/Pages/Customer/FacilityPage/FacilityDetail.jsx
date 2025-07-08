@@ -164,7 +164,7 @@ const FacilityDetail = ({ facility, jobPosts, setJobPosts }) => {
       setSelectedJobPostId("");
 
       // Add the new job post to the beginning of the list
-      setJobPosts((prev) => [response.data.jobpost, ...prev]);
+      setJobPosts((prev) => [response.data.jobPost, ...prev]);
     } catch (error) {
       console.error("Error copying job post:", error);
       message.error("求人のコピー中にエラーが発生しました");
@@ -229,7 +229,7 @@ const FacilityDetail = ({ facility, jobPosts, setJobPosts }) => {
         />
       );
 
-    return facility.photos.length === 0 ? (
+    return facility.photos?.length === 0 ? (
       <img
         src="/assets/images/noimage.png"
         alt={facility.name}
