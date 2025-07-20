@@ -277,7 +277,9 @@ const FacilityAdd = () => {
       // Handle photo upload first
       let photoUrls = { fileUrls: [], files: [] };
       if (facilityPhoto.length > 0) {
+        const toastId = toast.loading("写真をアップロード中...", 0);
         photoUrls = await handleUpload();
+        toast.remove(toastId);
       }
 
       const facilityData = {
