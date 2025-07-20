@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { InboxOutlined } from "@ant-design/icons";
 import { Button, message, Tooltip, Upload } from "antd";
+import { toast } from "react-hot-toast";
+
 import axios from "axios";
 import DescriptionChangeModal from "./DescriptionChangeModal";
 import { Helmet } from "react-helmet";
@@ -27,18 +29,18 @@ const PhotoManagement = () => {
     let updatedFileList = info.fileList.filter((file, index) => {
       // Check file size (limit to 5MB)
       if (file.size > 5 * 1024 * 1024) {
-        message.error("ファイルサイズは5MB以下にしてください");
+        toast.error("ファイルサイズは5MB以下にしてください");
         return false;
       }
       if (index >= 10) {
-        message.error("最大10枚までしかアップロードできません");
+        toast.error("最大10枚までしかアップロードできません");
         return false;
       }
 
       if (file.status === "done") {
-        message.success(`${file.name} file uploaded successfully`);
+        toast.success(`${file.name} file uploaded successfully`);
       } else if (file.status === "error") {
-        message.error(`${file.name} file upload failed.`);
+        toast.error(`${file.name} file upload failed.`);
         return false;
       }
       return true;
@@ -69,10 +71,10 @@ const PhotoManagement = () => {
         }
       );
       if (response.data.isAuthError) return;
-      message.success("ファイルアップロード完了!");
+      toast.success("ファイルアップロード完了!");
       return response.data.files; // Assuming API returns an array of URLs
     } catch (error) {
-      message.error("ファイルアップロードに失敗しました");
+      toast.error("ファイルアップロードに失敗しました");
     } finally {
       setLoading(false);
     }
@@ -100,9 +102,9 @@ const PhotoManagement = () => {
           phototUrl
         )}`
       );
-      if (response.error) return message.error("画像の削除に失敗しました。");
+      if (response.error) return toast.error("画像の削除に失敗しました。");
       if (response.data.isAuthError) return;
-      message.success("ファイル削除完了!");
+      toast.success("ファイル削除完了!");
       setPhotos(response.data.photos?.images);
 
       const deleteResult = await handleDeleteImage(phototUrl);
@@ -126,7 +128,7 @@ const PhotoManagement = () => {
       setFileList([]);
     } catch (error) {
       console.error(error);
-      message.error("エラーが発生しました");
+      toast.error("エラーが発生しました");
     }
   };
 
@@ -140,7 +142,7 @@ const PhotoManagement = () => {
     } catch (error) {
       if (error.status != 401) {
         console.error(error);
-        message.error("エラーが発生しました");
+        toast.error("エラーが発生しました");
       }
     }
   };
@@ -157,14 +159,14 @@ const PhotoManagement = () => {
         `${import.meta.env.VITE_APP_API_URL}/api/v1/photo/${selectedPhoto}`,
         { description: description }
       );
-      if (response.data.error) return message.error(response.data.message);
-      message.success("説明文更新成功");
+      if (response.data.error) return toast.error(response.data.message);
+      toast.success("説明文更新成功");
       setDescription("");
       setDescriptionModalOpen(false);
       getPhotosByCustomerId();
     } catch (error) {
       console.error(error);
-      message.error("エラーが発生しました");
+      toast.error("エラーが発生しました");
     }
   };
 

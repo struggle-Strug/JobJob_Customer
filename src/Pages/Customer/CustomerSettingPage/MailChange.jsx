@@ -3,6 +3,8 @@ import axios from "axios";
 import { useState } from "react";
 import { Helmet } from "react-helmet";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
+
 import { useAuth } from "../../../context/AuthContext.jsx";
 
 const MailChange = () => {
@@ -17,10 +19,10 @@ const MailChange = () => {
       }`,
       { email: email }
     );
-    if (response.data.error) return message.error(response.data.message);
+    if (response.data.error) return toast.error(response.data.message);
     if (response.data.isAuthError) return;
     localStorage.removeItem("token");
-    message.success("メールアドレスを変更しました。");
+    toast.success("メールアドレスを変更しました。");
     navigate("/customers/sign_in");
   };
 

@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import moment from "moment";
 import { message as antdMessage, Spin } from "antd";
+import { toast } from "react-hot-toast";
+
 import MessageDetails from "./MessageDetails";
 import { Helmet } from "react-helmet";
 
@@ -21,7 +23,7 @@ const Message = () => {
         `${import.meta.env.VITE_APP_API_URL}/api/v1/message/company`
       );
       if (response.data.error) {
-        antdMessage.error(response.data.message);
+        antdtoast.error(response.data.message);
         return;
       }
       if (response.data.isAuthError) return;
@@ -30,7 +32,7 @@ const Message = () => {
       filterMessages(response.data.messages, status);
     } catch (error) {
       if (error.status != 401) {
-        antdMessage.error("メッセージの取得に失敗しました");
+        antdtoast.error("メッセージの取得に失敗しました");
         console.error("Error fetching messages:", error);
       }
     } finally {
@@ -40,11 +42,11 @@ const Message = () => {
 
   // Update a specific message in the messages array
   const updateMessage = (updatedMessage) => {
-    if (!updatedMessage || !updatedMessage._id) return;
+    if (!updatedMessage || !updatedtoast._id) return;
 
     // Update the message in the messages array
     const updatedMessages = messages.map((msg) =>
-      msg._id === updatedMessage._id ? { ...msg, unread: false } : msg
+      msg._id === updatedtoast._id ? { ...msg, unread: false } : msg
     );
 
     setMessages(updatedMessages);
@@ -59,14 +61,14 @@ const Message = () => {
       if (currentStatus === "all") return true;
       if (currentStatus === "unread") {
         // Check if the message is unread
-        return message.unread === true;
+        return toast.unread === true;
       }
       if (currentStatus === "unreply") {
         // Check if the last message is from the first person (needs a reply)
         return (
-          message.content &&
-          message.content.length > 0 &&
-          message.content[message.content.length - 1].sender === message.first
+          toast.content &&
+          toast.content.length > 0 &&
+          toast.content[toast.content.length - 1].sender === toast.first
         );
       }
       return true;
@@ -152,30 +154,30 @@ const Message = () => {
               filteredMessages?.map((message) => {
                 // Check if this message is the last sender
                 const lastMessage =
-                  message.content && message.content.length > 0
-                    ? message.content[message.content.length - 1]
+                  toast.content && toast.content.length > 0
+                    ? toast.content[toast.content.length - 1]
                     : null;
                 const isLastFromOther =
-                  lastMessage && lastMessage.sender === message.first;
-                const isUnread = message.unread === true;
+                  lastMessage && lasttoast.sender === toast.first;
+                const isUnread = toast.unread === true;
 
                 return (
                   <div
-                    key={message._id}
+                    key={toast._id}
                     className={`flex flex-col border-b border-gray-200 p-3 cursor-pointer transition-colors duration-200 ${
-                      selectedMessageId === message._id
+                      selectedMessageId === toast._id
                         ? "bg-gray-200"
                         : "bg-transparent"
                     } hover:bg-gray-100`}
-                    onClick={() => handleSelectMessage(message._id)}
+                    onClick={() => handleSelectMessage(toast._id)}
                   >
                     <div className="flex items-start justify-between">
                       <div>
                         <p className="text-xs font-medium">
-                          {message.user_id?.name}
+                          {toast.user_id?.name}
                         </p>
                         <p className="text-xs text-gray-500">
-                          ID: {message.user_id?.member_id}
+                          ID: {toast.user_id?.member_id}
                         </p>
                       </div>
                       <div className="flex gap-1">
@@ -196,21 +198,21 @@ const Message = () => {
 
                     <div className="mt-1">
                       <p className="text-xs text-gray-700">
-                        {calculateAge(message.user_id?.birthday)}歳・
-                        {message.user_id?.gender}
+                        {calculateAge(toast.user_id?.birthday)}歳・
+                        {toast.user_id?.gender}
                       </p>
                       <p className="text-xs text-gray-700">
-                        {message.facility_id?.name}
+                        {toast.facility_id?.name}
                       </p>
                     </div>
 
                     {lastMessage && (
                       <>
                         <p className="text-xs break-words line-clamp-2 mt-2 text-gray-600">
-                          {lastMessage.message}
+                          {lasttoast.message}
                         </p>
                         <p className="text-xs text-gray-400 mt-1 text-right">
-                          {moment(lastMessage.date).format("YYYY/MM/DD HH:mm")}
+                          {moment(lasttoast.date).format("YYYY/MM/DD HH:mm")}
                         </p>
                       </>
                     )}

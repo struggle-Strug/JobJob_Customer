@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Modal, message } from "antd";
 import axios from "axios";
+import { toast } from "react-hot-toast";
 
 const PhotoSelectModal = ({ visible, onCancel, onSelect }) => {
   const [photos, setPhotos] = useState([]);
@@ -18,7 +19,7 @@ const PhotoSelectModal = ({ visible, onCancel, onSelect }) => {
           setPhotos(response.data.photos?.images || []);
         })
         .catch(() => {
-          message.error("写真の取得に失敗しました");
+          toast.error("写真の取得に失敗しました");
         });
     }
   }, [visible]);

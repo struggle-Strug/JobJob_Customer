@@ -1,5 +1,7 @@
 import { Helmet } from "react-helmet";
 import { CloseOutlined, PlusOutlined } from "@ant-design/icons";
+import { toast } from "react-hot-toast";
+
 import {
   Button,
   Checkbox,
@@ -293,7 +295,7 @@ const AddJobPost = () => {
 
     // Check if adding this would exceed the limit
     if (jobPostPicture.length >= 10) {
-      message.error("最大10枚までしか選択できません");
+      toast.error("最大10枚までしか選択できません");
       return;
     }
 
@@ -333,11 +335,11 @@ const AddJobPost = () => {
             },
           }
         );
-        message.success("写真のアップロードが完了しました");
+        toast.success("写真のアップロードが完了しました");
         uploadedFileUrls = response.data.files.map((item) => item.fileUrl);
         uploadedFiles = response.data.files;
       } catch (error) {
-        message.error("写真アップロード失敗");
+        toast.error("写真アップロード失敗");
         return { fileUrls: [], files: [] };
       }
     }
@@ -355,37 +357,37 @@ const AddJobPost = () => {
   const handleSubmit = async (allowed) => {
     // バリデーションチェック（失敗した場合は早期リターン）
     if (jobPostTypeDetail === "")
-      return message.error("募集職種を選択してください。");
+      return toast.error("募集職種を選択してください。");
     if (jobPostSubTitle === "")
-      return message.error("訴求文タイトルを入力してください。");
+      return toast.error("訴求文タイトルを入力してください。");
     if (jobPostSubDescription === "")
-      return message.error("訴求文を入力してください。");
+      return toast.error("訴求文を入力してください。");
     if (jobPostWorkItem.length === 0)
-      return message.error("仕事内容を選択してください。");
+      return toast.error("仕事内容を選択してください。");
     if (jobPostWorkContent === "")
-      return message.error("仕事内容を入力してください。");
+      return toast.error("仕事内容を入力してください。");
     if (jobPostEmploymentType.length === 0)
-      return message.error("雇用形態を選択してください。");
+      return toast.error("雇用形態を選択してください。");
     if (jobPostSalaryType === "")
-      return message.error("給与体系を入力してください。");
+      return toast.error("給与体系を入力してください。");
     if (jobPostSalaryMin === 0 || jobPostSalaryMax === 0)
-      return message.error("給与下限・上限を入力してください。");
+      return toast.error("給与下限・上限を入力してください。");
     // if (
     //   isNaN(jobPostSalaryMin) ||
     //   isNaN(jobPostSalaryMax) ||
     //   isNaN(jobPostExpectedIncome)
     // )
-    //   return message.error(
+    //   return toast.error(
     //     "給与下限・上限、想定年収を正しく入力してください。"
     //   );
     if (jobPostWorkTimeType.length === 0 && jobPostWorkTimeContent === "")
-      return message.error("勤務時間を選択してください。");
+      return toast.error("勤務時間を選択してください。");
     if (jobPostRestType.length === 0 && jobPostRestContent === "")
-      return message.error("休日を選択してください。");
+      return toast.error("休日を選択してください。");
     if (jobPostQualificationContent === "")
-      return message.error("応募要件を入力してください。");
+      return toast.error("応募要件を入力してください。");
     if (jobPostProcess === "")
-      return message.error("選考プロセスを入力してください。");
+      return toast.error("選考プロセスを入力してください。");
 
     setLoading(true);
     try {
@@ -440,8 +442,8 @@ const AddJobPost = () => {
         JobPostData
       );
       if (response.data.error || response.data.isAuthError)
-        message.error(response.data.error);
-      else message.success("求人を登録しました");
+        toast.error(response.data.error);
+      else toast.success("求人を登録しました");
 
       // 各フォームのリセット
       setJobPostType("");
@@ -484,7 +486,7 @@ const AddJobPost = () => {
     const response = await axios.get(
       `${import.meta.env.VITE_APP_API_URL}/api/v1/facility/${facilityId}`
     );
-    if (response.data.error) message.error(response.data.error);
+    if (response.data.error) toast.error(response.data.error);
     if (response.data.isAuthError) return;
     setFacility(response.data.facility);
   };
@@ -625,7 +627,7 @@ const AddJobPost = () => {
                     if (file) {
                       // Check file size (limit to 5MB)
                       if (file.size > 5 * 1024 * 1024) {
-                        message.error("ファイルサイズは5MB以下にしてください");
+                        toast.error("ファイルサイズは5MB以下にしてください");
                         return;
                       }
 
@@ -640,7 +642,7 @@ const AddJobPost = () => {
                         })
                         .catch((error) => {
                           console.error("File processing error:", error);
-                          message.error("ファイル処理中にエラーが発生しました");
+                          toast.error("ファイル処理中にエラーが発生しました");
                         });
                     }
                   };
@@ -1007,7 +1009,7 @@ const AddJobPost = () => {
           // 現在の画像枚数と新たに選択された画像枚数を合わせる
           const totalPhotos = jobPostPicture.length + formattedPhotos.length;
           if (totalPhotos > 10) {
-            message.error("最大10枚までしか選択できません");
+            toast.error("最大10枚までしか選択できません");
             return;
           }
           setJobPostPicture((prev) => [...prev, ...formattedPhotos]);

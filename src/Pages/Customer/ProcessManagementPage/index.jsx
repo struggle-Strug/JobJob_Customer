@@ -3,6 +3,8 @@ import { message } from "antd";
 import axios from "axios";
 import { useCallback, useEffect, useState } from "react";
 import { useAuth } from "../../../context/AuthContext.jsx";
+import { toast } from "react-hot-toast";
+
 import ProcessDetail from "./ProcessDetail";
 
 const ProcessManagementPage = () => {
@@ -18,13 +20,13 @@ const ProcessManagementPage = () => {
           customer?._id
         }/${status}`
       );
-      if (res.data.error) return message.error(res.data.error);
+      if (res.data.error) return toast.error(res.data.error);
       if (res.data.isAuthError) return;
       setProcesses(res.data.processes);
     } catch (error) {
       if (error.status != 401) {
         console.error(error);
-        message.error("エラーが発生しました");
+        toast.error("エラーが発生しました");
       }
     }
   }, [status, customer]);
@@ -34,13 +36,13 @@ const ProcessManagementPage = () => {
       const res = await axios.get(
         `${import.meta.env.VITE_APP_API_URL}/api/v1/message/jobNumbers`
       );
-      if (res.data.error) return message.error(res.data.error);
+      if (res.data.error) return toast.error(res.data.error);
       if (res.data.isAuthError) return;
       setJobNumbers(res.data.jobNumbers);
     } catch (error) {
       if (error.status != 401) {
         console.error(error);
-        message.error("エラーが発生しました");
+        toast.error("エラーが発生しました");
       }
     }
   }, []);

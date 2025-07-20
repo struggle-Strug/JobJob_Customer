@@ -1,5 +1,7 @@
 import axios from "axios";
 import { Suspense, lazy, useCallback, useEffect, useState } from "react";
+import { jwtDecode } from "jwt-decode";
+import { Toaster, toast } from "react-hot-toast";
 import {
   Navigate,
   Route,
@@ -9,6 +11,7 @@ import {
 } from "react-router-dom";
 import { useAuth } from "./context/AuthContext.jsx";
 import "./index.css";
+import "antd/dist/reset.css";
 import { setupAxiosInterceptors } from "./utils/axiosConfig.js";
 
 // Lazy load components
@@ -94,6 +97,15 @@ function App() {
   const location = useLocation();
   const params = new URLSearchParams(location.search);
 
+  const isTokenExpired = (token) => {
+    try {
+      const decoded = jwtDecode(token); // ✅ not jwt_decode
+      return decoded.exp < Date.now() / 1000;
+    } catch (e) {
+      return true; // Consider invalid token as expired
+    }
+  };
+
   // Set up axios interceptors once when the component mounts
   useEffect(() => {
     // Pass the logout function to the interceptor
@@ -112,13 +124,12 @@ function App() {
         return;
       }
 
-      if (res.data.user.type === "member") {
-        setUser(res.data.user.data);
-        setIsAuthenticated(true);
-      } else if (res.data.user.type === "customer") {
+      if (res.data.user.type === "customer") {
         setCustomer(res.data.user.data);
+        setIsAuthenticated(true);
       } else if (res.data.user.type === "admin") {
         setAdmin(res.data.user.data);
+        setIsAuthenticated(true);
       }
     } catch (error) {
       // Error handling is now managed by the axios interceptor
@@ -130,93 +141,107 @@ function App() {
 
   useEffect(() => {
     if (token) {
-      getUserData();
+      if (isTokenExpired(token)) {
+        setIsAuthenticated(false);
+        setIsLoading(false);
+      } else {
+        getUserData();
+      }
     } else {
-      // If no token, ensure user is not authenticated
-      logout({
-        showMessage: false,
-      });
+      setIsAuthenticated(false);
       setIsLoading(false);
     }
-  }, [token, getUserData, logout]);
+  }, [token, getUserData, setIsAuthenticated, pathname]);
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      setCustomer(null); // Clear user context
+    }
+  }, [isAuthenticated]);
 
   if (isLoading) {
     return <Loading />;
   }
 
   return (
-    <Suspense fallback={<Loading />}>
-      <Routes>
-        <Route path="/" element={<CompanyLandingPage />} />
-        <Route element={<CLLogoLayout />}>
-          <Route path="/customers/new" element={<CustomerSignUp />} />
-          <Route path="/customers/sign_in" element={<CustomerSignIn />} />
-          <Route path="/customers/rule" element={<Rule />} />
-          <Route path="/customers/banner" element={<LinkRequirement />} />
-        </Route>
-        {token && (customer || admin) ? (
-          <>
-            <Route element={<CLLayout />}>
-              <Route path="/customers" element={<CLMainLayout />}>
-                <Route path="/customers" element={<CLTop />} />
-                <Route
-                  path="/customers/facility/add"
-                  element={<FacilityAdd />}
-                />
-                <Route path="/customers/facility" element={<FacilityPage />} />
-                <Route
-                  path="/customers/facility/edit/:facility_id"
-                  element={<FacilityEdit />}
-                />
-                <Route
-                  path="/customers/jobpost/edit/:jobpost_id"
-                  element={<JobPostEdit />}
-                />
-                <Route
-                  path="/customers/jobpost/:facilityId/add"
-                  element={<AddJobPost />}
-                />
-                <Route
-                  path="/customers/recruit/edit/"
-                  element={<ProcessManagementPage />}
-                />
-                <Route
-                  path="/customers/picture/"
-                  element={<PhotoManagement />}
-                />
-                <Route path="/customers/message" element={<CLMessage />} />
-                <Route
-                  path="/customers/settings/"
-                  element={<CustomerSetting />}
-                />
-                <Route
-                  path="/customers/settings/mail"
-                  element={<MailChange />}
-                />
-                <Route
-                  path="/customers/settings/pass"
-                  element={<PasswordChange />}
-                />
-                <Route
-                  path="/customers/settings/corporate/"
-                  element={<CoporateInformation />}
-                />
-                <Route
-                  path="/customers/settings/user"
-                  element={<CoporateManagement />}
-                />
-              </Route>
-              <Route path="*" element={<NotFound />} />
-              <Route path="/customers/contact" element={<Preparing />} />
-            </Route>
-          </>
-        ) : (
+    <>
+      <Toaster position="top-center" />
+      <Suspense fallback={<Loading />}>
+        <Routes>
+          <Route path="/" element={<CompanyLandingPage />} />
           <Route element={<CLLogoLayout />}>
-            <Route path="/*" element={<Navigate to="/customers/sign_in" />} />
+            <Route path="/customers/new" element={<CustomerSignUp />} />
+            <Route path="/customers/sign_in" element={<CustomerSignIn />} />
+            <Route path="/customers/rule" element={<Rule />} />
+            <Route path="/customers/banner" element={<LinkRequirement />} />
           </Route>
-        )}
-      </Routes>
-    </Suspense>
+          {token && (customer || admin) ? (
+            <>
+              <Route element={<CLLayout />}>
+                <Route path="/customers" element={<CLMainLayout />}>
+                  <Route path="/customers" element={<CLTop />} />
+                  <Route
+                    path="/customers/facility/add"
+                    element={<FacilityAdd />}
+                  />
+                  <Route
+                    path="/customers/facility"
+                    element={<FacilityPage />}
+                  />
+                  <Route
+                    path="/customers/facility/edit/:facility_id"
+                    element={<FacilityEdit />}
+                  />
+                  <Route
+                    path="/customers/jobpost/edit/:jobpost_id"
+                    element={<JobPostEdit />}
+                  />
+                  <Route
+                    path="/customers/jobpost/:facilityId/add"
+                    element={<AddJobPost />}
+                  />
+                  <Route
+                    path="/customers/recruit/edit/"
+                    element={<ProcessManagementPage />}
+                  />
+                  <Route
+                    path="/customers/picture/"
+                    element={<PhotoManagement />}
+                  />
+                  <Route path="/customers/message" element={<CLMessage />} />
+                  <Route
+                    path="/customers/settings/"
+                    element={<CustomerSetting />}
+                  />
+                  <Route
+                    path="/customers/settings/mail"
+                    element={<MailChange />}
+                  />
+                  <Route
+                    path="/customers/settings/pass"
+                    element={<PasswordChange />}
+                  />
+                  <Route
+                    path="/customers/settings/corporate/"
+                    element={<CoporateInformation />}
+                  />
+                  <Route
+                    path="/customers/settings/user"
+                    element={<CoporateManagement />}
+                  />
+                </Route>
+                <Route path="*" element={<NotFound />} />
+                <Route path="/customers/contact" element={<Preparing />} />
+              </Route>
+            </>
+          ) : (
+            <Route element={<CLLogoLayout />}>
+              <Route path="/*" element={<Navigate to="/customers/sign_in" />} />
+            </Route>
+          )}
+        </Routes>
+      </Suspense>
+    </>
   );
 }
 

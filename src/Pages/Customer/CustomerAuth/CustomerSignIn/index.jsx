@@ -2,6 +2,7 @@ import { Input, message } from "antd";
 import { useLocation } from "react-router-dom";
 
 import axios from "axios";
+import { toast } from "react-hot-toast";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../../../context/AuthContext.jsx";
@@ -17,9 +18,8 @@ const CustomerSignIn = () => {
   const token = queryParams.get("token");
 
   const handleSubmit = async (e) => {
-    if (email === "")
-      return message.error("メールアドレスを入力してください。");
-    if (password === "") return message.error("パスワードを入力してください。");
+    if (email === "") return toast.error("メールアドレスを入力してください。");
+    if (password === "") return toast.error("パスワードを入力してください。");
     e.preventDefault();
     const signInData = {
       email: email,
@@ -30,9 +30,9 @@ const CustomerSignIn = () => {
       signInData
     );
     if (resData.data.error)
-      return message.error("メールアドレスまたはパスワードが間違えています 。");
+      return toast.error("メールアドレスまたはパスワードが間違えています 。");
     localStorage.setItem("token", resData.data.token);
-    message.success(resData.data.message);
+    toast.success(resData.data.message);
     setCustomer(resData.data.customer);
     setCustomerUser(resData.data.user);
     navigate("/customers");

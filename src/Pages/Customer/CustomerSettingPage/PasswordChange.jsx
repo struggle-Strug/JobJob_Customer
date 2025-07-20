@@ -3,6 +3,8 @@ import axios from "axios";
 import { useState } from "react";
 import { Helmet } from "react-helmet";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
+
 import { useAuth } from "../../../context/AuthContext.jsx";
 
 const PasswordChange = () => {
@@ -15,7 +17,7 @@ const PasswordChange = () => {
 
   const handlePassword = async () => {
     if (newPassword !== confirmPassword) {
-      message.error("新しいパスワードと確認用パスワードが一致しません");
+      toast.error("新しいパスワードと確認用パスワードが一致しません");
       return;
     }
     const resData = await axios.put(
@@ -25,9 +27,9 @@ const PasswordChange = () => {
       { currentPassword: currentPassword, newPassword: newPassword }
     );
     if (resData.data.error || resData.data.isAuthError) {
-      message.error(resData.data.message);
+      toast.error(resData.data.message);
     } else {
-      message.success(resData.data.message);
+      toast.success(resData.data.message);
     }
   };
 
