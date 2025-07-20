@@ -364,7 +364,7 @@ const FacilityEdit = () => {
       let uploadedFiles = [];
 
       if (newImages.length > 0) {
-        toast.loading("写真をアップロード中...", 0);
+        const toastId = toast.loading("写真をアップロード中...", 0);
 
         try {
           // Split files into batches of 3 to prevent server overload
@@ -411,7 +411,7 @@ const FacilityEdit = () => {
           );
           return;
         } finally {
-          toast.destroy();
+          toast.remove(toastId);
         }
       }
 
