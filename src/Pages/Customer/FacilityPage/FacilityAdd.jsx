@@ -276,9 +276,9 @@ const FacilityAdd = () => {
       // Handle photo upload first
       let photoUrls = { fileUrls: [], files: [] };
       if (facilityPhoto.length > 0) {
-        message.loading("写真をアップロード中...", 0);
+        const hide = message.loading("写真をアップロード中...", 0);
         photoUrls = await handleUpload();
-        message.destroy();
+        hide();
       }
 
       const facilityData = {

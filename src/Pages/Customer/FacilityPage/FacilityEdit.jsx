@@ -362,7 +362,7 @@ const FacilityEdit = () => {
       let uploadedFiles = [];
 
       if (newImages.length > 0) {
-        message.loading("写真をアップロード中...", 0);
+        const hide = message.loading("写真をアップロード中...", 0);
 
         try {
           // Split files into batches of 3 to prevent server overload
@@ -409,7 +409,7 @@ const FacilityEdit = () => {
           );
           return;
         } finally {
-          message.destroy();
+          hide();
         }
       }
 
