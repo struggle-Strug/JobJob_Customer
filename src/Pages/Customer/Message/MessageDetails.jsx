@@ -157,7 +157,7 @@ const MessageDetails = ({ id, onMessageSent, onMessageRead }) => {
       const messageData = {
         message_id: message?.message_id,
         message: content,
-        sender: toast.second,
+        sender: message?.second,
         recevier: message?.first,
         files: files || [],
       };
@@ -271,8 +271,8 @@ const MessageDetails = ({ id, onMessageSent, onMessageRead }) => {
           <div className="flex items-center gap-3">
             {message?.jobPost_id && (
               <Link
-                to={`/${getJobValueByKey(toast.jobpost_id?.type)}/${
-                  toast.jobPost_id
+                to={`/${getJobValueByKey(message.jobpost_id?.type)}/${
+                  message.jobPost_id
                 }`}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -303,7 +303,7 @@ const MessageDetails = ({ id, onMessageSent, onMessageRead }) => {
               <div
                 key={index}
                 className={`flex flex-col ${
-                  contenttoast.sender === toast.first
+                  contentMessage.sender === message.first
                     ? "items-start"
                     : "items-end"
                 }`}
@@ -311,21 +311,21 @@ const MessageDetails = ({ id, onMessageSent, onMessageRead }) => {
                 <div className="flex flex-col max-w-[70%]">
                   <div
                     className={`rounded-lg ${
-                      contenttoast.sender === toast.first
+                      contentMessage.sender === message.first
                         ? "bg-gray-100 text-gray-800"
                         : "bg-blue-50 text-gray-800"
                     }`}
                   >
-                    {contentMessage?.message && contenttoast.message !== "" && (
+                    {contentMessage?.message && contentMessage.message !== "" && (
                       <pre className="text-sm p-4 leading-relaxed whitespace-pre-wrap break-words">
-                        {contenttoast.message}
+                        {contentMessage.message}
                       </pre>
                     )}
                   </div>
 
-                  {contentMessage?.files && contenttoast.files.length > 0 && (
+                  {contentMessage?.files && contentMessage.files.length > 0 && (
                     <div className="flex flex-col gap-1 mt-2 ml-1">
-                      {contenttoast.files.map((file, fileIndex) => (
+                      {contentMessage.files.map((file, fileIndex) => (
                         <Link
                           key={fileIndex}
                           to={`${
@@ -344,8 +344,8 @@ const MessageDetails = ({ id, onMessageSent, onMessageRead }) => {
                   )}
 
                   <div className="text-xs text-gray-500 mt-1 ml-1">
-                    {contenttoast.date &&
-                      moment(contenttoast.date).format("YYYY/MM/DD HH:mm")}
+                    {contentMessage.date &&
+                      moment(contentMessage.date).format("YYYY/MM/DD HH:mm")}
                   </div>
                 </div>
               </div>
@@ -398,7 +398,7 @@ const MessageDetails = ({ id, onMessageSent, onMessageRead }) => {
         <MemberDetailModal
           open={userProfileModal}
           onCancel={() => setUserProfileModal(false)}
-          memberData={toast.user_id}
+          memberData={message.user_id}
         />
       )}
     </div>
