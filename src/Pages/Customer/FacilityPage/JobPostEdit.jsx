@@ -47,6 +47,7 @@ const removeCommas = (value) => {
 
 const JobPostEdit = () => {
   const { customer } = useAuth();
+  const [sheetData, setSheetData] = useState([]);
   const [jobPost, setJobPost] = useState(null);
   const [jobPostType, setJobPostType] = useState("");
   const [jobPostTypeDetail, setJobPostTypeDetail] = useState("");
@@ -104,6 +105,45 @@ const JobPostEdit = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const jobPostId = pathname.split("/").pop();
+
+  const SHEET_ID = import.meta.env.VITE_APP_SHEET_ID;
+  const API_KEY = import.meta.env.VITE_APP_GOOGLE_API_KEY;
+  const RANGE = "Sheet1!A1:BS411";
+
+  const fetchSheetData = async () => {
+    try {
+      const response = await axios.get(
+        `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${RANGE}?key=${API_KEY}`
+      );
+      const original = response.data.values || [];
+
+      // Transpose rows and columns
+      const transposed = original[0]
+        ? original[0].map((_, colIndex) =>
+            original.map((row) => row[colIndex] || "")
+          )
+        : [];
+
+      const searchByJobType = transposed.filter(
+        (col) => col[0] === jobPostTypeDetail
+      );
+      const indexesOfTrue = searchByJobType[0]
+        .map((col, index) => {
+          if (col === "〇") {
+            return index;
+          } else return;
+        })
+        .filter((index) => index !== undefined);
+      const conditions = indexesOfTrue.map((index) => transposed[2][index]);
+      setSheetData(conditions);
+    } catch (error) {
+      console.error("シートデータの取得に失敗しました:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchSheetData();
+  }, [jobPostTypeDetail]);
 
   const previewData = {
     type: jobPostTypeDetail,
@@ -790,7 +830,9 @@ const JobPostEdit = () => {
             <span className="text-[0.7rem] text-[#FF2A3B]">(必須)</span>
           </p>
           <Checkbox.Group
-            options={workItemOptions}
+            options={workItemOptions.filter((item) =>
+              sheetData.includes(item.value)
+            )}
             value={jobPostWorkItem}
             onChange={(value) => setJobPostWorkItem(value)}
             className="w-4/5"
@@ -809,7 +851,9 @@ const JobPostEdit = () => {
         <div className="flex items-start mt-4 desireEmployment">
           <p className="lg:text-sm text-xs w-1/5">診療科目</p>
           <Checkbox.Group
-            options={serviceSubjectOptions}
+            options={serviceSubjectOptions.filter((item) =>
+              sheetData.includes(item.value)
+            )}
             value={jobPostServiceSubject}
             onChange={(value) => setJobPostServiceSubject(value)}
             className="w-4/5"
@@ -818,7 +862,9 @@ const JobPostEdit = () => {
         <div className="flex items-start mt-4 desireEmployment">
           <p className="lg:text-sm text-xs w-1/5">サービス形態</p>
           <Checkbox.Group
-            options={serviceTypeOptions}
+            options={serviceTypeOptions.filter((item) =>
+              sheetData.includes(item.value)
+            )}
             value={jobPostServiceType}
             onChange={(value) => setJobPostServiceType(value)}
             className="w-4/5"
@@ -892,7 +938,9 @@ const JobPostEdit = () => {
         <div className="flex items-start mt-4 desireEmployment">
           <p className="lg:text-sm text-xs w-1/5">待遇（選択）</p>
           <Checkbox.Group
-            options={jobPostTreatmentTypeOptions}
+            options={jobPostTreatmentTypeOptions.filter((item) =>
+              sheetData.includes(item.value)
+            )}
             value={jobPostTreatmentType}
             onChange={(value) => setJobPostTreatmentType(value)}
             className="w-4/5"
@@ -909,7 +957,9 @@ const JobPostEdit = () => {
         <div className="flex items-start mt-4 desireEmployment">
           <p className="lg:text-sm text-xs w-1/5">勤務時間・休憩時間（選択）</p>
           <Checkbox.Group
-            options={jobPostWorkTimeTypeOptions}
+            options={jobPostWorkTimeTypeOptions.filter((item) =>
+              sheetData.includes(item.value)
+            )}
             value={jobPostWorkTimeType}
             onChange={(value) => setJobPostWorkTimeType(value)}
             className="w-4/5"
@@ -941,7 +991,9 @@ const JobPostEdit = () => {
             <span className="text-[0.7rem] text-[#FF2A3B]">(必須)</span>
           </p>
           <Checkbox.Group
-            options={jobPostRestTypeOptions}
+            options={jobPostRestTypeOptions.filter((item) =>
+              sheetData.includes(item.value)
+            )}
             value={jobPostRestType}
             onChange={(value) => setJobPostRestType(value)}
             className="w-4/5"
@@ -966,7 +1018,9 @@ const JobPostEdit = () => {
         <div className="flex items-start mt-4 desireEmployment">
           <p className="lg:text-sm text-xs w-1/5">教育体制・研修</p>
           <Checkbox.Group
-            options={jobPostEducationTypeOptions}
+            options={jobPostEducationTypeOptions.filter((item) =>
+              sheetData.includes(item.value)
+            )}
             value={jobPostEducationContent}
             onChange={(value) => setJobPostEducationContent(value)}
             className="w-4/5"
@@ -975,7 +1029,9 @@ const JobPostEdit = () => {
         <div className="flex items-start mt-4 desireEmployment">
           <p className="lg:text-sm text-xs w-1/5">応募要件（資格）</p>
           <Checkbox.Group
-            options={jobPostQualificationTypeOptions}
+            options={jobPostQualificationTypeOptions.filter((item) =>
+              sheetData.includes(item.value)
+            )}
             value={jobPostQualificationType}
             onChange={(value) => setJobPostQualificationType(value)}
             className="w-4/5"
@@ -984,7 +1040,9 @@ const JobPostEdit = () => {
         <div className="flex items-start mt-4 desireEmployment">
           <p className="lg:text-sm text-xs w-1/5">応募要件（他条件）</p>
           <Checkbox.Group
-            options={jobPostQualificationOtherOptions}
+            options={jobPostQualificationOtherOptions.filter((item) =>
+              sheetData.includes(item.value)
+            )}
             value={jobPostQualificationOther}
             onChange={(value) => setJobPostQualificationOther(value)}
             className="w-4/5"
