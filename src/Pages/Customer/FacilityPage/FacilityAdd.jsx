@@ -1,6 +1,7 @@
 "use client";
 
 import { CloseOutlined, PlusOutlined } from "@ant-design/icons";
+import { Link } from "react-router-dom";
 import { toast } from "react-hot-toast";
 
 import {
@@ -62,6 +63,7 @@ const FacilityAdd = () => {
   const [facilityRestDay, setFacilityRestDay] = useState("");
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [currentImage, setCurrentImage] = useState(null);
+  const [successModal, setSuccessModal] = useState(false);
 
   // ローディング状態
   const [loading, setLoading] = useState(false);
@@ -236,7 +238,7 @@ const FacilityAdd = () => {
           uploadedFiles = [...uploadedFiles, ...response.data.files];
         }
 
-        toast.success("ファイルのアップロードに完了しました");
+        //toast.success("ファイルのアップロードに完了しました");
       } catch (error) {
         console.error("Upload error:", error);
         toast.error(
@@ -313,8 +315,9 @@ const FacilityAdd = () => {
         facilityData
       );
       if (response.data.error) toast.error(response.data.error);
-      toast.success(response.data.message);
-      navigate(`/customers/facility`);
+      //toast.success(response.data.message);
+      //navigate(`/customers/facility`);
+      setSuccessModal(true);
     } catch (error) {
       console.error("Facility save error:", error);
       toast.error(
@@ -694,6 +697,32 @@ const FacilityAdd = () => {
           }}
           onSave={handleEditSave}
         />
+
+        <Modal
+          open={successModal}
+          onCancel={() => setSuccessModal(false)}
+          footer={null}
+          width={600}
+          className="modal"
+        >
+          <div className="flex flex-col">
+            <p className="text-lg font-bold text-[#343434] pl-4">
+              施設の掲載申請を行いました。
+            </p>
+            <p className="text-sm text-[#343434] mt-4">
+              ジョブジョブ運営事務局での内容確認後の1～2営業日で施設情報を公開致します。
+            </p>
+            <p className="text-sm text-[#343434]">
+              施設掲載申請中も求人情報の申請は行えますので、続けて求人情報を登録してください。
+            </p>
+            <Link
+              to="/customers/facility"
+              className="text-center text-blue-500 mt-4"
+            >
+              求人一覧へ戻る
+            </Link>
+          </div>
+        </Modal>
       </div>
     </>
   );
