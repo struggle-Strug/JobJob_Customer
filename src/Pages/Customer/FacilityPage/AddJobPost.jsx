@@ -103,6 +103,8 @@ const AddJobPost = () => {
   const [previewImage, setPreviewImage] = useState("");
   const [previewOpen, setPreviewOpen] = useState(false);
   const [photoSelectModalVisible, setPhotoSelectModalVisible] = useState(false);
+  const [draftModal, setDraftModal] = useState(false);
+  const [successModal, setSuccessModal] = useState(false);
   const [loading, setLoading] = useState(false);
 
   // Add state for image editing
@@ -335,7 +337,7 @@ const AddJobPost = () => {
             },
           }
         );
-        toast.success("写真のアップロードが完了しました");
+        //toast.success("写真のアップロードが完了しました");
         uploadedFileUrls = response.data.files.map((item) => item.fileUrl);
         uploadedFiles = response.data.files;
       } catch (error) {
@@ -443,7 +445,7 @@ const AddJobPost = () => {
       );
       if (response.data.error || response.data.isAuthError)
         toast.error(response.data.error);
-      else toast.success("求人を登録しました");
+      //else toast.success("求人を登録しました");
 
       // 各フォームのリセット
       setJobPostType("");
@@ -474,7 +476,14 @@ const AddJobPost = () => {
       setJobPostQualificationContent("");
       setJobPostQualificationWelcome("");
       setJobPostProcess("");
-      navigate("/customers/facility");
+
+      //navigate("/customers/facility");
+
+      if (allowed) {
+        setSuccessModal(true);
+      } else {
+        setDraftModal(true);
+      }
     } catch (error) {
       console.error(error);
     } finally {
@@ -1049,6 +1058,51 @@ const AddJobPost = () => {
         }}
         onSave={handleEditSave}
       />
+
+      <Modal
+        open={draftModal}
+        onCancel={() => setDraftModal(false)}
+        footer={null}
+        width={600}
+        className="modal"
+      >
+        <div className="flex flex-col">
+          <p className="text-lg font-bold text-[#343434] pl-4">
+            求人情報を下書き保存しました。
+          </p>
+          <p className="text-sm text-[#343434] mt-4">
+            再開する場合は、求人編集から再開してください。
+          </p>
+          <Link
+            to="/customers/facility"
+            className="text-center text-blue-500 mt-4"
+          >
+            求人一覧へ戻る
+          </Link>
+        </div>
+      </Modal>
+      <Modal
+        open={successModal}
+        onCancel={() => setSuccessModal(false)}
+        footer={null}
+        width={600}
+        className="modal"
+      >
+        <div className="flex flex-col">
+          <p className="text-lg font-bold text-[#343434] pl-4">
+            求人の掲載申請を行いました。
+          </p>
+          <p className="text-sm text-[#343434] mt-4">
+            ジョブジョブ運営事務局での内容確認後の1～2営業日で求人情報を公開致します。
+          </p>
+          <Link
+            to="/customers/facility"
+            className="text-center text-blue-500 mt-4"
+          >
+            求人一覧へ戻る
+          </Link>
+        </div>
+      </Modal>
     </>
   );
 };
