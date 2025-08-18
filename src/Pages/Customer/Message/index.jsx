@@ -27,9 +27,10 @@ const Message = () => {
         return;
       }
       if (response.data.isAuthError) return;
-      setMessages(response.data.messages);
+      const avaliableMessages = response.data.messages.filter(msg => msg.user_id !== null);
+      setMessages(avaliableMessages);
       // Apply initial filtering
-      filterMessages(response.data.messages, status);
+      filterMessages(avaliableMessages, status);
     } catch (error) {
       if (error.status != 401) {
         antdtoast.error("メッセージの取得に失敗しました");
