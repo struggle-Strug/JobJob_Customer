@@ -83,6 +83,7 @@ function App() {
     user,
     setCustomer,
     customer,
+    setCustomerUser,
     admin,
     setAdmin,
     logout,
@@ -126,6 +127,9 @@ function App() {
 
       if (res.data.user.type === "customer") {
         setCustomer(res.data.user.data);
+        setIsAuthenticated(true);
+      } else if (res.data.user.type === "customerUser") {
+        setCustomerUser(res.data.user.data);
         setIsAuthenticated(true);
       } else if (res.data.user.type === "admin") {
         setAdmin(res.data.user.data);
