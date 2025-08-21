@@ -228,7 +228,10 @@ const JobPostPreview = ({ open, onCancel, data }) => {
 
         {/* 休日（選択） */}
         <div className="flex items-start mt-4 desireEmployment">
-          <p className="lg:text-sm text-xs w-1/4">休日（選択）</p>
+          <p className="lg:text-sm text-xs w-1/4">
+            休日（選択）
+            <span className="text-[0.7rem] text-[#FF2A3B]">(必須)</span>
+          </p>
           <p className="lg:text-sm text-xs text-[#343434] w-3/4">
             {Array.isArray(data?.rest_type)
               ? data.rest_type.join(",")
@@ -240,7 +243,6 @@ const JobPostPreview = ({ open, onCancel, data }) => {
         <div className="flex items-start mt-4 textarea">
           <p className="lg:text-sm text-xs w-1/4">
             休日
-            <span className="text-[0.7rem] text-[#FF2A3B]">(必須)</span>
           </p>
           <p
             style={{ whiteSpace: "pre-wrap" }}
