@@ -83,6 +83,7 @@ function App() {
     user,
     setCustomer,
     customer,
+    customerUser,
     setCustomerUser,
     admin,
     setAdmin,
@@ -159,7 +160,7 @@ function App() {
 
   useEffect(() => {
     if (!isAuthenticated) {
-      setCustomer(null); // Clear user context
+      setCustomerUser(null); // Clear user context
     }
   }, [isAuthenticated]);
 
@@ -179,7 +180,7 @@ function App() {
             <Route path="/customers/rule" element={<Rule />} />
             <Route path="/customers/banner" element={<LinkRequirement />} />
           </Route>
-          {token && (customer || admin) ? (
+          {token && (customerUser || admin) ? (
             <>
               <Route element={<CLLayout />}>
                 <Route path="/customers" element={<CLMainLayout />}>
