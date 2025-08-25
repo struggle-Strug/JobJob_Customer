@@ -35,7 +35,7 @@ export const AuthProvider = ({ children }) => {
     // Reset all user states
     setIsAuthenticated(false);
     setUser(null);
-    setCustomer(null);
+    setCustomerUser(null);
     setAdmin(null);
 
     // Show message to user - only if this is not an automatic logout
