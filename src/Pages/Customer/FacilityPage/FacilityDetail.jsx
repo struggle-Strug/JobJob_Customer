@@ -228,6 +228,9 @@ const FacilityDetail = ({ facility, jobPosts, setJobPosts }) => {
           src="/assets/images/noimage.png"
           alt="No image"
           className="w-full h-32 object-cover rounded-lg"
+          onError={(e) => {
+            e.target.src = "/assets/images/noimage.png";
+          }}
         />
       );
 
@@ -236,6 +239,9 @@ const FacilityDetail = ({ facility, jobPosts, setJobPosts }) => {
         src="/assets/images/noimage.png"
         alt={facility.name}
         className="w-full h-32 object-cover rounded-lg"
+        onError={(e) => {
+          e.target.src = "/assets/images/noimage.png";
+        }}
       />
     ) : (
       <img
@@ -246,6 +252,9 @@ const FacilityDetail = ({ facility, jobPosts, setJobPosts }) => {
             ? "cover"
             : "contain"
         } rounded-lg`}
+        onError={(e) => {
+          e.target.src = "/assets/images/noimage.png";
+        }}
       />
     );
   };
@@ -275,6 +284,9 @@ const FacilityDetail = ({ facility, jobPosts, setJobPosts }) => {
             ? "cover"
             : "contain"
         } rounded-lg`}
+        onError={(e) => {
+          e.target.src = "/assets/images/noimage.png";
+        }}
       />
     );
   };
