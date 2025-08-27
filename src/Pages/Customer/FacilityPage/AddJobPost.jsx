@@ -44,7 +44,7 @@ const removeCommas = (value) => {
 };
 
 const AddJobPost = () => {
-  const { customer } = useAuth();
+  const { customerUser } = useAuth();
   const [sheetData, setSheetData] = useState([]);
   const [facility, setFacility] = useState(null);
   const [jobPostType, setJobPostType] = useState("");
@@ -403,7 +403,7 @@ const AddJobPost = () => {
 
       const JobPostData = {
         facility_id: facility.facility_id,
-        customer_id: customer.customer_id,
+        customer_id: customerUser.customerId,
         type: jobPostTypeDetail,
         picture: allUrls,
         sub_title: jobPostSubTitle,

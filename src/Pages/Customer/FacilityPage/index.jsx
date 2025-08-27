@@ -199,7 +199,7 @@ const FacilityPage = () => {
                     <div className="w-1/3 aspect-video overflow-hidden rounded-md flex-shrink-0">
                       {facility?.photos?.length > 0 ? (
                         <img
-                          src={facility?.photos[0].url || "/placeholder.svg"}
+                          src={facility?.photos[0].url || "/assets/images/noimage.png"}
                           alt={facility?.name}
                           className={`w-full h-full object-${
                             75 / 42 <
@@ -208,6 +208,9 @@ const FacilityPage = () => {
                               ? "cover"
                               : "contain"
                           }`}
+                          onError={(e) => {
+                            e.target.src = "/assets/images/noimage.png";
+                          }}
                         />
                       ) : (
                         <img
