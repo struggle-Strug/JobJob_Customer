@@ -37,7 +37,7 @@ import { Municipalities } from "../../../utils/constants/categories/municipaliti
 import ImageEditModal from "./ImageEditModal";
 
 const FacilityEdit = () => {
-  const { customer } = useAuth();
+  const { customerUser } = useAuth();
   const [facility, setFacility] = useState({});
   const [facilityName, setFacilityName] = useState("");
   const [facilityPostalCode, setFacilityPostalCode] = useState("");
@@ -422,7 +422,7 @@ const FacilityEdit = () => {
       const uniqueImageUrls = [...new Set(allImageUrls)];
 
       const facilityData = {
-        customer_id: customer.customer_id,
+        customer_id: customerUser.customerId,
         name: facilityName,
         postal_code: facilityPostalCode,
         prefecture: facilityPrefecture,
