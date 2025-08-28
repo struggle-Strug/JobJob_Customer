@@ -8,7 +8,7 @@ import { toast } from "react-hot-toast";
 import ProcessDetail from "./ProcessDetail";
 
 const ProcessManagementPage = () => {
-  const { customer } = useAuth();
+  const { customerUser } = useAuth();
   const [status, setStatus] = useState("allOnGoings");
   const [processes, setProcesses] = useState([]);
   const [jobNumbers, setJobNumbers] = useState([]);
@@ -17,7 +17,7 @@ const ProcessManagementPage = () => {
     try {
       const res = await axios.get(
         `${import.meta.env.VITE_APP_API_URL}/api/v1/message/${
-          customer?._id
+          customerUser?.customerId
         }/${status}`
       );
       if (res.data.error) return toast.error(res.data.error);
@@ -29,7 +29,7 @@ const ProcessManagementPage = () => {
         toast.error("エラーが発生しました");
       }
     }
-  }, [status, customer]);
+  }, [status, customerUser]);
 
   const getJobNumbersByStatus = useCallback(async () => {
     try {
@@ -48,10 +48,10 @@ const ProcessManagementPage = () => {
   }, []);
 
   useEffect(() => {
-    if (customer?._id) {
+    if (customerUser?.customerId) {
       getProcessesByStatus();
     }
-  }, [status, customer, getProcessesByStatus]);
+  }, [status, customerUser, getProcessesByStatus]);
 
   useEffect(() => {
     getJobNumbersByStatus();
