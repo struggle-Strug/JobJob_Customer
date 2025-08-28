@@ -12,7 +12,6 @@ import { PlusCircleOutlined } from "@ant-design/icons";
 import { Helmet } from "react-helmet";
 
 const FacilityPage = () => {
-  const { customer } = useAuth();
   const [facilities, setFacilities] = useState([]);
   const [jobPosts, setJobPosts] = useState([]);
   const [facility, setFacility] = useState(null);

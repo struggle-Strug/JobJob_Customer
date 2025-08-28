@@ -54,8 +54,9 @@ const formCellStyleNoTopNoLeft = {
 };
 
 const CoporateInformation = () => {
-  const { customer, customerUser } = useAuth();
+  const { customerUser } = useAuth();
   // 各入力項目用の state 変数の定義
+  const [customer, setCustomer] = useState({});
   const [alreadyRegistered, setAlreadyRegistered] = useState(false);
   const [postalCode, setPostalCode] = useState(""); // 郵便番号
   const [prefecture, setPrefecture] = useState(""); // 都道府県
@@ -77,13 +78,28 @@ const CoporateInformation = () => {
     }
   };
 
+  const getCustomer = async() => {
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_APP_API_URL}/api/v1/customers/${customerUser?.customerId}`
+      );
+      if(response.data.error) return toast.error(response.data.message)
+      setCustomer(response.data.customer)
+    } catch (error) {
+      if (error.status != 401) {
+        console.error(error);
+        toast.error("エラーが発生しました");
+      }
+    }
+  }
+
   // 送信ボタン押下時のハンドラ（中身は未実装）
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const companyData = {
-      id: customer?._id,
-      companyName: customer?.companyName,
+      customer_id: customerUser?.customerId,
+      companyName: customerUser?.companyName,
       postalCode: postalCode,
       prefecture: prefecture,
       municipality: municipality,
@@ -128,25 +144,6 @@ const CoporateInformation = () => {
       );
       if (response.data.error || response.data.isAuthError) {
         if (response.data.isAuthError) return;
-        if (
-          response.data.message === "まだ法人情報が未登録です。" &&
-          customer
-        ) {
-          if (customer.contactPerson && customer.contactPerson.length > 1) {
-            setLastName(customer.contactPerson.split(" ")[0]);
-            setFirstName(customer.contactPerson.split(" ")[1]);
-          }
-          if (
-            customer.contactPerson &&
-            customer.huriganaContactPerson.length > 1
-          ) {
-            setLastNameFurigana(customer.huriganaContactPerson.split(" ")[0]);
-            setFirstNameFurigana(customer.huriganaContactPerson.split(" ")[1]);
-          }
-          setPhoneNumber(customer.phoneNumber);
-        } else {
-          return toast.error(response.data.message);
-        }
       } else {
         setAlreadyRegistered(true);
         setPostalCode(response.data.company.postalCode);
@@ -174,6 +171,7 @@ const CoporateInformation = () => {
 
   useEffect(() => {
     getCompanyInfo();
+    getCustomer();
   }, []);
   return (
     <>

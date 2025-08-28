@@ -6,7 +6,7 @@ import { Helmet } from "react-helmet";
 import { toast } from "react-hot-toast";
 
 const CoporateManagement = () => {
-  const { customer } = useAuth();
+  const { customerUser } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
   const [users, setUsers] = useState([]);
   const [addUserModal, setAddUserModal] = useState(false);
@@ -42,7 +42,7 @@ const CoporateManagement = () => {
           {/* Center the button in the cell */}
           <Button
             className="text-white text-sm bg-[#FF2A3B] px-4 py-2 rounded-lg"
-            disabled={data?.length === 1 || record.email === customer.email}
+            disabled={data?.length === 1 || record.email === customerUser.email}
             onClick={() => handleDelete(record.id)}
           >
             削除

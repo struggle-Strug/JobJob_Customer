@@ -34,7 +34,7 @@ import ImageEditModal from "./ImageEditModal";
 import PhotoSelectModal from "./PhotoSelectModal";
 
 const FacilityAdd = () => {
-  const { customer } = useAuth();
+  const { customerUser } = useAuth();
   const navigate = useNavigate();
 
   // 各種フォーム用の状態
@@ -285,7 +285,7 @@ const FacilityAdd = () => {
       }
 
       const facilityData = {
-        customer_id: customer.customer_id,
+        customer_id: customerUser.customerId,
         name: facilityName,
         postal_code: facilityPostalCode,
         prefecture: facilityPrefecture,

@@ -46,7 +46,7 @@ const removeCommas = (value) => {
 };
 
 const JobPostEdit = () => {
-  const { customer } = useAuth();
+  const { customerUser } = useAuth();
   const [sheetData, setSheetData] = useState([]);
   const [jobPost, setJobPost] = useState(null);
   const [jobPostType, setJobPostType] = useState("");

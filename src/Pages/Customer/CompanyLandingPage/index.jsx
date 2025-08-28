@@ -4,17 +4,17 @@ import { useAuth } from "../../../context/AuthContext.jsx";
 import { useEffect } from "react";
 
 const CompanyLandingPage = () => {
-  const { customer } = useAuth();
+  const { customerUser } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
     document.title =
       "完全無料！求人掲載・採用・募集について | JobJob (ジョブジョブ)";
-    if (customer) {
+    if (customerUser) {
       navigate("/customers");
     }
     //window.scrollTo({ top: 0, behavior: "smooth" });
-  }, [customer]);
+  }, [customerUser]);
   return (
     <>
       <section className="bg-[#F1F1F1] w-full md:h-8 2xs:h-4 px-4">
