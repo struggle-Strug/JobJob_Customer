@@ -117,9 +117,6 @@ const PhotoManagement = () => {
   const handleSave = async () => {
     try {
       const files = await handleUpload();
-      await axios.post(`${import.meta.env.VITE_APP_API_URL}/api/v1/photo/`, {
-        companyName: companyName,
-      });
       await axios.put(
         `${import.meta.env.VITE_APP_API_URL}/api/v1/photo/image`,
         files || []
