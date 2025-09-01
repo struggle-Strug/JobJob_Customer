@@ -32,7 +32,7 @@ const CLTop = () => {
           </div>
           <div className="flex items-start justify-start gap-4 border-b-[1px] border-[#e7e7e7] w-full py-3">
             <Link
-              to={"/contact"}
+              to={"/customers/contact"}
               className="lg:text-base md:text-sm text-xs text-[#5d9eff] hover:underline hover:text-[#ff5a5f] duration-300"
             >
               お問い合わせ
