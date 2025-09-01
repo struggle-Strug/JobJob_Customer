@@ -29,19 +29,9 @@ import { getBase64 } from "../../../utils/getBase64";
 import ImageEditModal from "./ImageEditModal";
 import PhotoSelectModal from "./PhotoSelectModal";
 
-const formatNumberWithCommas = (value) => {
-  if (!value) return "";
-  // Remove any non-digit characters and format with commas
-  const numericValue = value.toString().replace(/[^\d]/g, "");
-  return numericValue.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-};
-
-const removeCommas = (value) => {
-  if (!value) return 0;
-  // Remove commas and convert to number
-  const numericValue = value.toString().replace(/,/g, "");
-  return Number.parseInt(numericValue) || 0;
-};
+// ===== 数値入力用ヘルパ（IME対策） =====
+const onlyDigits = (v) => (v || "").replace(/[^\d]/g, "");
+const withComma = (v) => (v ? Number(v).toLocaleString() : "");
 
 const AddJobPost = () => {
   const { customerUser } = useAuth();
@@ -58,10 +48,17 @@ const AddJobPost = () => {
   const [jobPostServiceType, setJobPostServiceType] = useState([]);
   const [jobPostEmploymentType, setJobPostEmploymentType] = useState([]);
   const [jobPostSalaryType, setJobPostSalaryType] = useState("");
+
+  // 数値（送信用の生値）
   const [jobPostSalaryMax, setJobPostSalaryMax] = useState(0);
   const [jobPostSalaryMin, setJobPostSalaryMin] = useState(0);
+  // 表示用（編集中はカンマ無し、compositionend/blurでカンマ付与）
   const [jobPostSalaryMinDisplay, setJobPostSalaryMinDisplay] = useState("");
   const [jobPostSalaryMaxDisplay, setJobPostSalaryMaxDisplay] = useState("");
+  // IME合成中フラグ
+  const [isComposingMin, setIsComposingMin] = useState(false);
+  const [isComposingMax, setIsComposingMax] = useState(false);
+
   const [jobPostSalaryRemarks, setJobPostSalaryRemarks] = useState("");
   const [jobPostExpectedIncome, setJobPostExpectedIncome] = useState(`例）
 【看護師/未経験】
@@ -182,22 +179,55 @@ const AddJobPost = () => {
     ];
   };
 
+  // ====== 給与入力（IME対策版） ======
   const handleSalaryMinChange = (e) => {
-    const inputValue = e.target.value;
-    const formattedValue = formatNumberWithCommas(inputValue);
-    const numericValue = removeCommas(inputValue);
-
-    setJobPostSalaryMinDisplay(formattedValue);
-    setJobPostSalaryMin(numericValue);
+    const raw = e.target.value;
+    if (isComposingMin) {
+      // 合成中は何もしない（表示はそのまま）
+      setJobPostSalaryMinDisplay(raw);
+      return;
+    }
+    const digits = onlyDigits(raw);
+    setJobPostSalaryMinDisplay(digits); // 入力中は整形しない
+    setJobPostSalaryMin(digits ? parseInt(digits, 10) : 0);
   };
 
   const handleSalaryMaxChange = (e) => {
-    const inputValue = e.target.value;
-    const formattedValue = formatNumberWithCommas(inputValue);
-    const numericValue = removeCommas(inputValue);
+    const raw = e.target.value;
+    if (isComposingMax) {
+      setJobPostSalaryMaxDisplay(raw);
+      return;
+    }
+    const digits = onlyDigits(raw);
+    setJobPostSalaryMaxDisplay(digits);
+    setJobPostSalaryMax(digits ? parseInt(digits, 10) : 0);
+  };
 
-    setJobPostSalaryMaxDisplay(formattedValue);
-    setJobPostSalaryMax(numericValue);
+  const handleMinCompositionStart = () => setIsComposingMin(true);
+  const handleMaxCompositionStart = () => setIsComposingMax(true);
+
+  const handleMinCompositionEnd = (e) => {
+    setIsComposingMin(false);
+    const digits = onlyDigits(e.target.value);
+    setJobPostSalaryMinDisplay(withComma(digits)); // ここで初めて整形
+    setJobPostSalaryMin(digits ? parseInt(digits, 10) : 0);
+  };
+  const handleMaxCompositionEnd = (e) => {
+    setIsComposingMax(false);
+    const digits = onlyDigits(e.target.value);
+    setJobPostSalaryMaxDisplay(withComma(digits));
+    setJobPostSalaryMax(digits ? parseInt(digits, 10) : 0);
+  };
+
+  const handleMinBlur = (e) => {
+    const digits = onlyDigits(e.target.value);
+    setJobPostSalaryMinDisplay(withComma(digits));
+    setJobPostSalaryMin(digits ? parseInt(digits, 10) : 0);
+  };
+  const handleMaxBlur = (e) => {
+    const digits = onlyDigits(e.target.value);
+    setJobPostSalaryMaxDisplay(withComma(digits));
+    setJobPostSalaryMax(digits ? parseInt(digits, 10) : 0);
   };
 
   const workItemOptions = Object.keys(Features.DESCRIPTION).map((workItem) => ({
@@ -374,14 +404,6 @@ const AddJobPost = () => {
       return toast.error("給与体系を入力してください。");
     if (jobPostSalaryMin === 0 || jobPostSalaryMax === 0)
       return toast.error("給与下限・上限を入力してください。");
-    // if (
-    //   isNaN(jobPostSalaryMin) ||
-    //   isNaN(jobPostSalaryMax) ||
-    //   isNaN(jobPostExpectedIncome)
-    // )
-    //   return toast.error(
-    //     "給与下限・上限、想定年収を正しく入力してください。"
-    //   );
     if (jobPostWorkTimeType.length === 0 && jobPostWorkTimeContent === "")
       return toast.error("勤務時間を選択してください。");
     if (jobPostRestType.length === 0 && jobPostRestContent === "")
@@ -445,7 +467,6 @@ const AddJobPost = () => {
       );
       if (response.data.error || response.data.isAuthError)
         toast.error(response.data.error);
-      //else toast.success("求人を登録しました");
 
       // 各フォームのリセット
       setJobPostType("");
@@ -461,6 +482,8 @@ const AddJobPost = () => {
       setJobPostSalaryType("");
       setJobPostSalaryMin(0);
       setJobPostSalaryMax(0);
+      setJobPostSalaryMinDisplay("");
+      setJobPostSalaryMaxDisplay("");
       setJobPostSalaryRemarks("");
       setJobPostExpectedIncome(0);
       setJobPostTreatmentType([]);
@@ -476,8 +499,6 @@ const AddJobPost = () => {
       setJobPostQualificationContent("");
       setJobPostQualificationWelcome("");
       setJobPostProcess("");
-
-      //navigate("/customers/facility");
 
       if (allowed) {
         setSuccessModal(true);
@@ -535,13 +556,13 @@ const AddJobPost = () => {
         let xOffset = 0;
         if (scaledWidth > outputWidth) {
           // Image is too wide after scaling to height - crop the sides
-          xOffset = (outputWidth - scaledWidth) / 2; // This will be negative, cropping both sides equally
+          xOffset = (outputWidth - scaledWidth) / 2; // negative -> crop sides
         } else {
-          // Image is narrower than output after scaling to height - center it with padding
-          xOffset = (outputWidth - scaledWidth) / 2; // This will be positive, adding padding
+          // narrower -> center with padding
+          xOffset = (outputWidth - scaledWidth) / 2;
         }
 
-        // Draw the image centered (or cropped) horizontally, full height
+        // Draw the image centered horizontally, full height
         ctx.drawImage(image, xOffset, 0, scaledWidth, outputHeight);
 
         // Convert canvas to blob
@@ -675,7 +696,7 @@ const AddJobPost = () => {
         <div className="flex items-center mt-4">
           <p className="lg:text-sm text-xs w-1/5">
             訴求文タイトル
-            <span className="text-[0.7rem] text-[#FF2A3B]">(必須)</span>
+            <span className="text[0.7rem] text-[#FF2A3B]">(必須)</span>
           </p>
           <Input
             value={jobPostSubTitle}
@@ -688,11 +709,6 @@ const AddJobPost = () => {
             訴求文
             <span className="text-[0.7rem] text-[#FF2A3B]">(必須)</span>
           </p>
-          {/* <EditorComponent
-            editorValue={jobPostSubDescription}
-            onEditorChange={(value) => setJobPostSubDescription(value)}
-            editorStyle={editorStyle}
-          /> */}
           <TextArea
             value={jobPostSubDescription}
             onChange={(e) => setJobPostSubDescription(e.target.value)}
@@ -771,7 +787,7 @@ const AddJobPost = () => {
             />
           </div>
         </div>
-        <div className="flex items-center mt-4">
+        <div className="flex items-start mt-4">
           <p className="lg:text-sm text-xs w-1/5">
             給与体系
             <span className="text-[0.7rem] text-[#FF2A3B]">(必須)</span>
@@ -785,6 +801,8 @@ const AddJobPost = () => {
             />
           </div>
         </div>
+
+        {/* ===== IME対応済み・給与下限/上限 ===== */}
         <div className="flex items-center mt-4">
           <p className="lg:text-sm text-xs w-1/5">
             給与下限・上限
@@ -794,6 +812,11 @@ const AddJobPost = () => {
             <Input
               value={jobPostSalaryMinDisplay}
               onChange={handleSalaryMinChange}
+              onCompositionStart={handleMinCompositionStart}
+              onCompositionEnd={handleMinCompositionEnd}
+              onBlur={handleMinBlur}
+              inputMode="numeric"
+              pattern="[0-9]*"
               className="w-1/4"
               placeholder="0"
             />
@@ -802,12 +825,18 @@ const AddJobPost = () => {
             <Input
               value={jobPostSalaryMaxDisplay}
               onChange={handleSalaryMaxChange}
+              onCompositionStart={handleMaxCompositionStart}
+              onCompositionEnd={handleMaxCompositionEnd}
+              onBlur={handleMaxBlur}
+              inputMode="numeric"
+              pattern="[0-9]*"
               className="w-1/4"
               placeholder="0"
             />
             <span className="mx-2 lg:text-sm text-xs">円</span>
           </div>
         </div>
+
         <div className="flex items-start mt-4 textarea">
           <p className="lg:text-sm text-xs w-1/5">給与備考</p>
           <div className="flex items-center justify-start w-4/5">
