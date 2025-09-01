@@ -208,7 +208,7 @@ const CoporateInformation = () => {
                 <p className="p-3">
                   ※法人名・貴社名を変更する場合は、
                   <Link
-                    to="/contact"
+                    to="/customers/contact"
                     style={{
                       textDecoration: "underline",
                       color: "-webkit-link",

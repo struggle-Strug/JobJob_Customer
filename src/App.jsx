@@ -32,6 +32,7 @@ const CustomerSignIn = lazy(() =>
 const NotFound = lazy(() => import("./Pages/NotFound/index.jsx"));
 const Preparing = lazy(() => import("./Pages/Preparing/index.jsx"));
 const Rule = lazy(() => import("./Pages/Customer/Rule/index.jsx"));
+const Contact = lazy(() => import("./Pages/Customer/Contact/index.jsx"));
 const CLMainLayout = lazy(() => import("./components/CLMainLayout/index.jsx"));
 const CLTop = lazy(() => import("./Pages/Customer/TopPage/index.jsx"));
 const FacilityPage = lazy(() =>
@@ -179,6 +180,7 @@ function App() {
             <Route path="/customers/sign_in" element={<CustomerSignIn />} />
             <Route path="/customers/rule" element={<Rule />} />
             <Route path="/customers/banner" element={<LinkRequirement />} />
+            <Route path="/customers/contact" element={<Contact />} />
           </Route>
           {token && (customerUser || admin) ? (
             <>
