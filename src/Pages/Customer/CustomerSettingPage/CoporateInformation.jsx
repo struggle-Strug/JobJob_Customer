@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Row, Col, Input, Select, message } from "antd";
+import { Row, Col, Input, Select } from "antd";
 import { toast } from "react-hot-toast";
 
 import { Link } from "react-router-dom";
@@ -93,9 +93,20 @@ const CoporateInformation = () => {
     }
   }
 
-  // 送信ボタン押下時のハンドラ（中身は未実装）
+  // 送信ボタン押下時のハンドラ
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const error = [];
+    if (postalCode === "") error.push("郵便番号");
+    if (prefecture === "") error.push("都道府県");
+    if (municipality === "") error.push("市区町村");
+    if (address === "") error.push("町名・番地");
+    if (firstName === "" || lastName === "") error.push("担当者氏名");
+    if (phoneNumber === "") error.push("電話番号");
+
+    if (error.length > 0)
+      return toast.error(error.join(", ") + "を入力してください。");
 
     const companyData = {
       customer_id: customerUser?.customerId,
