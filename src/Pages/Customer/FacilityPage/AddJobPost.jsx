@@ -29,9 +29,11 @@ import { getBase64 } from "../../../utils/getBase64";
 import ImageEditModal from "./ImageEditModal";
 import PhotoSelectModal from "./PhotoSelectModal";
 
-// ===== 数値入力用ヘルパ（IME対策） =====
+/** ========= 数値入力ユーティリティ ========= */
 const onlyDigits = (v) => (v || "").replace(/[^\d]/g, "");
-const withComma = (v) => (v ? Number(v).toLocaleString() : "");
+const formatComma = (digits) =>
+  digits ? digits.replace(/\B(?=(\d{3})+(?!\d))/g, ",") : "";
+const commaCount = (s) => (s.match(/,/g) || []).length;
 
 const AddJobPost = () => {
   const { customerUser } = useAuth();
@@ -48,17 +50,10 @@ const AddJobPost = () => {
   const [jobPostServiceType, setJobPostServiceType] = useState([]);
   const [jobPostEmploymentType, setJobPostEmploymentType] = useState([]);
   const [jobPostSalaryType, setJobPostSalaryType] = useState("");
-
-  // 数値（送信用の生値）
   const [jobPostSalaryMax, setJobPostSalaryMax] = useState(0);
   const [jobPostSalaryMin, setJobPostSalaryMin] = useState(0);
-  // 表示用（編集中はカンマ無し、compositionend/blurでカンマ付与）
   const [jobPostSalaryMinDisplay, setJobPostSalaryMinDisplay] = useState("");
   const [jobPostSalaryMaxDisplay, setJobPostSalaryMaxDisplay] = useState("");
-  // IME合成中フラグ
-  const [isComposingMin, setIsComposingMin] = useState(false);
-  const [isComposingMax, setIsComposingMax] = useState(false);
-
   const [jobPostSalaryRemarks, setJobPostSalaryRemarks] = useState("");
   const [jobPostExpectedIncome, setJobPostExpectedIncome] = useState(`例）
 【看護師/未経験】
@@ -107,6 +102,10 @@ const AddJobPost = () => {
   // Add state for image editing
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [currentImage, setCurrentImage] = useState(null);
+
+  /** ===== IME 合成中フラグ（日本語キーボード対策） ===== */
+  const [isComposingMin, setIsComposingMin] = useState(false);
+  const [isComposingMax, setIsComposingMax] = useState(false);
 
   const navigate = useNavigate();
   const { pathname } = useLocation();
@@ -179,54 +178,97 @@ const AddJobPost = () => {
     ];
   };
 
-  // ====== 給与入力（IME対策版） ======
+  /** ========= 給与入力（Min） ========= */
   const handleSalaryMinChange = (e) => {
-    const raw = e.target.value;
+    const el = e.target;
+    const raw = el.value;
+
     if (isComposingMin) {
-      // 合成中は何もしない（表示はそのまま）
       setJobPostSalaryMinDisplay(raw);
       return;
     }
+
+    const prev = jobPostSalaryMinDisplay || "";
+    const prevCommas = commaCount(prev);
+
     const digits = onlyDigits(raw);
-    setJobPostSalaryMinDisplay(digits); // 入力中は整形しない
+    const formatted = formatComma(digits);
+    const nextCommas = commaCount(formatted);
+
+    setJobPostSalaryMinDisplay(formatted);
+    setJobPostSalaryMin(digits ? parseInt(digits, 10) : 0);
+
+    // キャレット補正
+    const base = el.selectionStart ?? formatted.length;
+    const caret = Math.max(
+      0,
+      Math.min(formatted.length, base + (nextCommas - prevCommas))
+    );
+    requestAnimationFrame(() => {
+      try {
+        el.setSelectionRange(caret, caret);
+      } catch {}
+    });
+  };
+  const handleMinCompositionStart = () => setIsComposingMin(true);
+  const handleMinCompositionEnd = (e) => {
+    setIsComposingMin(false);
+    const digits = onlyDigits(e.target.value);
+    const formatted = formatComma(digits);
+    setJobPostSalaryMinDisplay(formatted);
+    setJobPostSalaryMin(digits ? parseInt(digits, 10) : 0);
+  };
+  const handleMinBlur = (e) => {
+    const digits = onlyDigits(e.target.value);
+    const formatted = formatComma(digits);
+    setJobPostSalaryMinDisplay(formatted);
     setJobPostSalaryMin(digits ? parseInt(digits, 10) : 0);
   };
 
+  /** ========= 給与入力（Max） ========= */
   const handleSalaryMaxChange = (e) => {
-    const raw = e.target.value;
+    const el = e.target;
+    const raw = el.value;
+
     if (isComposingMax) {
       setJobPostSalaryMaxDisplay(raw);
       return;
     }
+
+    const prev = jobPostSalaryMaxDisplay || "";
+    const prevCommas = commaCount(prev);
+
     const digits = onlyDigits(raw);
-    setJobPostSalaryMaxDisplay(digits);
+    const formatted = formatComma(digits);
+    const nextCommas = commaCount(formatted);
+
+    setJobPostSalaryMaxDisplay(formatted);
     setJobPostSalaryMax(digits ? parseInt(digits, 10) : 0);
-  };
 
-  const handleMinCompositionStart = () => setIsComposingMin(true);
+    // キャレット補正
+    const base = el.selectionStart ?? formatted.length;
+    const caret = Math.max(
+      0,
+      Math.min(formatted.length, base + (nextCommas - prevCommas))
+    );
+    requestAnimationFrame(() => {
+      try {
+        el.setSelectionRange(caret, caret);
+      } catch {}
+    });
+  };
   const handleMaxCompositionStart = () => setIsComposingMax(true);
-
-  const handleMinCompositionEnd = (e) => {
-    setIsComposingMin(false);
-    const digits = onlyDigits(e.target.value);
-    setJobPostSalaryMinDisplay(withComma(digits)); // ここで初めて整形
-    setJobPostSalaryMin(digits ? parseInt(digits, 10) : 0);
-  };
   const handleMaxCompositionEnd = (e) => {
     setIsComposingMax(false);
     const digits = onlyDigits(e.target.value);
-    setJobPostSalaryMaxDisplay(withComma(digits));
+    const formatted = formatComma(digits);
+    setJobPostSalaryMaxDisplay(formatted);
     setJobPostSalaryMax(digits ? parseInt(digits, 10) : 0);
-  };
-
-  const handleMinBlur = (e) => {
-    const digits = onlyDigits(e.target.value);
-    setJobPostSalaryMinDisplay(withComma(digits));
-    setJobPostSalaryMin(digits ? parseInt(digits, 10) : 0);
   };
   const handleMaxBlur = (e) => {
     const digits = onlyDigits(e.target.value);
-    setJobPostSalaryMaxDisplay(withComma(digits));
+    const formatted = formatComma(digits);
+    setJobPostSalaryMaxDisplay(formatted);
     setJobPostSalaryMax(digits ? parseInt(digits, 10) : 0);
   };
 
@@ -367,7 +409,6 @@ const AddJobPost = () => {
             },
           }
         );
-        //toast.success("写真のアップロードが完了しました");
         uploadedFileUrls = response.data.files.map((item) => item.fileUrl);
         uploadedFiles = response.data.files;
       } catch (error) {
@@ -376,7 +417,7 @@ const AddJobPost = () => {
       }
     }
 
-    // 既存画像のURLを抽出（重複している可能性がないか確認）
+    // 既存画像のURLを抽出
     const existingUrls = existingImages.map((image) => image.url);
 
     // 両方を統合して返す
@@ -556,10 +597,10 @@ const AddJobPost = () => {
         let xOffset = 0;
         if (scaledWidth > outputWidth) {
           // Image is too wide after scaling to height - crop the sides
-          xOffset = (outputWidth - scaledWidth) / 2; // negative -> crop sides
+          xOffset = (outputWidth - scaledWidth) / 2; // negative, crop both sides
         } else {
-          // narrower -> center with padding
-          xOffset = (outputWidth - scaledWidth) / 2;
+          // Image is narrower - center with padding
+          xOffset = (outputWidth - scaledWidth) / 2; // positive, padding
         }
 
         // Draw the image centered horizontally, full height
@@ -637,25 +678,22 @@ const AddJobPost = () => {
               onPreview={handlePreview}
               onRemove={handleRemove}
               customRequest={({ onSuccess }) => {
-                // Do nothing, just call onSuccess to mark it as done
                 setTimeout(() => {
                   onSuccess("ok", null);
                 }, 0);
               }}
               showUploadList={{ showPreviewIcon: true, showRemoveIcon: true }}
-              openFileDialogOnClick={false} // Prevent opening file dialog on click
+              openFileDialogOnClick={false}
             >
               <div
                 className="flex items-center justify-center aspect-square w-32 cursor-pointer flex-col rounded-lg border border-dashed bg-light-gray p-3"
                 onClick={() => {
-                  // Create a file input element
                   const input = document.createElement("input");
                   input.type = "file";
                   input.accept = "image/*";
                   input.onchange = (e) => {
                     const file = e.target.files[0];
                     if (file) {
-                      // Check file size (limit to 5MB)
                       if (file.size > 5 * 1024 * 1024) {
                         toast.error("ファイルサイズは5MB以下にしてください");
                         return;
@@ -663,7 +701,6 @@ const AddJobPost = () => {
 
                       getBase64(file)
                         .then((base64) => {
-                          // Instead of showing the modal, directly process the image
                           createProcessedImage(base64).then(
                             (processedImage) => {
                               handleEditSave(processedImage);
@@ -696,7 +733,7 @@ const AddJobPost = () => {
         <div className="flex items-center mt-4">
           <p className="lg:text-sm text-xs w-1/5">
             訴求文タイトル
-            <span className="text[0.7rem] text-[#FF2A3B]">(必須)</span>
+            <span className="text-[0.7rem] text-[#FF2A3B]">(必須)</span>
           </p>
           <Input
             value={jobPostSubTitle}
@@ -801,8 +838,6 @@ const AddJobPost = () => {
             />
           </div>
         </div>
-
-        {/* ===== IME対応済み・給与下限/上限 ===== */}
         <div className="flex items-center mt-4">
           <p className="lg:text-sm text-xs w-1/5">
             給与下限・上限
@@ -836,7 +871,6 @@ const AddJobPost = () => {
             <span className="mx-2 lg:text-sm text-xs">円</span>
           </div>
         </div>
-
         <div className="flex items-start mt-4 textarea">
           <p className="lg:text-sm text-xs w-1/5">給与備考</p>
           <div className="flex items-center justify-start w-4/5">
@@ -1039,12 +1073,11 @@ const AddJobPost = () => {
         onCancel={() => setPhotoSelectModalVisible(false)}
         onSelect={(selected) => {
           const formattedPhotos = selected.map((photo, index) => ({
-            uid: `existing-${Date.now()}-${Math.random()}`, // 常に新規の一意キーを生成
+            uid: `existing-${Date.now()}-${Math.random()}`,
             name: `Photo ${jobPostPicture.length + index + 1}`,
             url: photo.photoUrl,
             status: "done",
           }));
-          // 現在の画像枚数と新たに選択された画像枚数を合わせる
           const totalPhotos = jobPostPicture.length + formattedPhotos.length;
           if (totalPhotos > 10) {
             toast.error("最大10枚までしか選択できません");
