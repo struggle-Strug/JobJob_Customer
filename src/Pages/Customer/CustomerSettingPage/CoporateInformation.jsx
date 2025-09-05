@@ -85,6 +85,15 @@ const CoporateInformation = () => {
       );
       if(response.data.error) return toast.error(response.data.message)
       setCustomer(response.data.customer)
+      setFirstName(response.data.customer.contactPerson.split(" ")[0]);
+      setLastName(response.data.customer.contactPerson.split(" ")[1]);
+      setFirstNameFurigana(
+        response.data.customer.huriganaContactPerson.split(" ")[0]
+      );
+      setLastNameFurigana(
+        response.data.customer.huriganaContactPerson.split(" ")[1]
+      );
+      setPhoneNumber(response.data.customer.phoneNumber);
     } catch (error) {
       if (error.status != 401) {
         console.error(error);
@@ -182,8 +191,11 @@ const CoporateInformation = () => {
 
   useEffect(() => {
     getCompanyInfo();
-    getCustomer();
   }, []);
+
+  useEffect(() => {
+    if(!alreadyRegistered) getCustomer()
+  }, [alreadyRegistered]);
   return (
     <>
       <Helmet>
