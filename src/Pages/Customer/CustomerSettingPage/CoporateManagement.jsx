@@ -18,6 +18,12 @@ const CoporateManagement = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+
+  // autofill 回避用 readOnly フラグ（フォーカス時に解除）
+  const [roEmail, setRoEmail] = useState(true);
+  const [roPassword, setRoPassword] = useState(true);
+  const [roConfirmPassword, setRoConfirmPassword] = useState(true);
+
   // Table columns
   const columns = [
     {
@@ -35,11 +41,9 @@ const CoporateManagement = () => {
     {
       title: "操作",
       key: "actions",
-      align: "center", // Center-align the column title and content
+      align: "center",
       render: (_, record) => (
         <div className="flex justify-center">
-          {" "}
-          {/* Center the button in the cell */}
           <Button
             className="text-white text-sm bg-[#FF2A3B] px-4 py-2 rounded-lg"
             disabled={data?.length === 1 || record.email === customerUser.email}
@@ -120,12 +124,17 @@ const CoporateManagement = () => {
     setEmail("");
     setPassword("");
     setConfirmPassword("");
+
+    // モーダルを開くたびに readOnly を true に戻す（autofill 回避）
+    setRoEmail(true);
+    setRoPassword(true);
+    setRoConfirmPassword(true);
   }, [addUserModal]);
 
   useEffect(() => {
     getUsers();
-    //window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
+
   return (
     <>
       <Helmet>
@@ -151,7 +160,7 @@ const CoporateManagement = () => {
           dataSource={data}
           pagination={{
             pageSize: 20,
-            position: ["bottomCenter"], // Center the pagination at the bottom
+            position: ["bottomCenter"],
           }}
           bordered
           size="middle"
@@ -166,93 +175,156 @@ const CoporateManagement = () => {
         width={800}
         className="modal"
       >
-        <div className="border-r-[1px] border-b-[1px] border-[#EFEFEF] m-8">
-          <div className="flex w-full border-t-[1px] border-[#EFEFEF]">
-            <div className="w-1/4 p-4 bg-[#f5f5f5] flex items-start">
-              <p className="text-sm font-bold text-[#343434]">担当者氏名</p>
+        {/* フォーム全体のオートコンプリートOFF */}
+        <form autoComplete="off">
+          {/* ブラウザのオートフィルを吸うダミーフィールド */}
+          <input
+            type="text"
+            name="username"
+            autoComplete="username"
+            style={{ position: "absolute", left: "-9999px", height: 0, width: 0, opacity: 0 }}
+            tabIndex={-1}
+            aria-hidden="true"
+          />
+          <input
+            type="password"
+            name="current-password"
+            autoComplete="current-password"
+            style={{ position: "absolute", left: "-9999px", height: 0, width: 0, opacity: 0 }}
+            tabIndex={-1}
+            aria-hidden="true"
+          />
+
+          <div className="border-r-[1px] border-b-[1px] border-[#EFEFEF] m-8">
+            <div className="flex w-full border-t-[1px] border-[#EFEFEF]">
+              <div className="w-1/4 p-4 bg-[#f5f5f5] flex items-start">
+                <p className="text-sm font-bold text-[#343434]">担当者氏名</p>
+              </div>
+              <div className="w-3/4 p-4">
+                <div className="w-full flex items-center gap-6">
+                  <Input
+                    placeholder="山田"
+                    className="w-1/2 h-10"
+                    value={contactPersonSei}
+                    onChange={(e) => setContactPersonSei(e.target.value)}
+                    autoComplete="off"
+                    name="cp_sei"
+                  />
+                  <Input
+                    placeholder="太郎"
+                    className="w-1/2 h-10"
+                    value={contactPersonMei}
+                    onChange={(e) => setContactPersonMei(e.target.value)}
+                    autoComplete="off"
+                    name="cp_mei"
+                  />
+                </div>
+              </div>
             </div>
-            <div className="w-3/4 p-4">
-              <div className="w-full flex items-center gap-6">
+
+            <div className="flex w-full border-t-[1px] border-[#EFEFEF]">
+              <div className="w-1/4 p-4 bg-[#f5f5f5] flex items-center">
+                <p className="text-sm font-bold text-[#343434]">
+                  <span className="bg-red-600 text-white rounded-sm px-1 text-xs mr-1">
+                    必須
+                  </span>
+                  メールアドレス
+                </p>
+              </div>
+              <div className="w-3/4 p-4">
                 <Input
-                  placeholder="山田"
-                  className="w-1/2 h-10"
-                  value={contactPersonSei}
-                  onChange={(e) => setContactPersonSei(e.target.value)}
+                  placeholder="jobjob@example.com"
+                  className="w-full h-10"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  // autofill 回避
+                  autoComplete="off"
+                  name="new-user-email"
+                  inputMode="email"
+                  spellCheck={false}
+                  autoCapitalize="off"
+                  readOnly={roEmail}
+                  onFocus={(e) => {
+                    if (roEmail) {
+                      setRoEmail(false);
+                      // フォーカス後に解除したreadOnlyが即反映されるように
+                      requestAnimationFrame(() => e.target.removeAttribute("readonly"));
+                    }
+                  }}
                 />
+              </div>
+            </div>
+
+            <div className="flex w-full border-t-[1px] border-[#EFEFEF]">
+              <div className="w-1/4 p-4 bg-[#f5f5f5] flex items-center">
+                <p className="text-sm font-bold text-[#343434]">
+                  <span className="bg-red-600 text-white rounded-sm px-1 text-xs mr-1">
+                    必須
+                  </span>
+                  パスワード
+                </p>
+              </div>
+              <div className="w-3/4 p-4">
                 <Input
-                  placeholder="太郎"
-                  className="w-1/2 h-10"
-                  value={contactPersonMei}
-                  onChange={(e) => setContactPersonMei(e.target.value)}
+                  type="password"
+                  className="w-full h-10"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  // autofill 回避
+                  autoComplete="new-password"
+                  name="new-user-password"
+                  readOnly={roPassword}
+                  onFocus={(e) => {
+                    if (roPassword) {
+                      setRoPassword(false);
+                      requestAnimationFrame(() => e.target.removeAttribute("readonly"));
+                    }
+                  }}
+                />
+              </div>
+            </div>
+
+            <div className="flex w-full border-t-[1px] border-[#EFEFEF]">
+              <div className="w-1/4 p-4 bg-[#f5f5f5] flex items-center">
+                <p className="text-sm font-bold text-[#343434]">
+                  <span className="bg-red-600 text-white rounded-sm px-1 text-xs mr-1">
+                    必須
+                  </span>
+                  パスワード
+                  <br />
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(確認)
+                </p>
+              </div>
+              <div className="w-3/4 p-4">
+                <Input
+                  type="password"
+                  className="w-full h-10"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  // autofill 回避
+                  autoComplete="new-password"
+                  name="new-user-password-confirm"
+                  readOnly={roConfirmPassword}
+                  onFocus={(e) => {
+                    if (roConfirmPassword) {
+                      setRoConfirmPassword(false);
+                      requestAnimationFrame(() => e.target.removeAttribute("readonly"));
+                    }
+                  }}
                 />
               </div>
             </div>
           </div>
-          <div className="flex w-full border-t-[1px] border-[#EFEFEF]">
-            <div className="w-1/4 p-4 bg-[#f5f5f5] flex items-center">
-              <p className="text-sm font-bold text-[#343434]">
-                <span className="bg-red-600 text-white rounded-sm px-1 text-xs mr-1">
-                  必須
-                </span>
-                メールアドレス
-              </p>
-            </div>
-            <div className="w-3/4 p-4">
-              <Input
-                placeholder="jobjob@example.com"
-                className="w-full h-10"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
+
+          <div className="flex justify-end">
+            <Button
+              className="text-white text-sm bg-[#FF2A3B] px-8 py-4 rounded-lg"
+              onClick={handleAdd}
+            >
+              登録
+            </Button>
           </div>
-          <div className="flex w-full border-t-[1px] border-[#EFEFEF]">
-            <div className="w-1/4 p-4 bg-[#f5f5f5] flex items-center">
-              <p className="text-sm font-bold text-[#343434]">
-                <span className="bg-red-600 text-white rounded-sm px-1 text-xs mr-1">
-                  必須
-                </span>
-                パスワード
-              </p>
-            </div>
-            <div className="w-3/4 p-4">
-              <Input
-                type="password"
-                className="w-full h-10"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </div>
-          </div>
-          <div className="flex w-full border-t-[1px] border-[#EFEFEF]">
-            <div className="w-1/4 p-4 bg-[#f5f5f5] flex items-center">
-              <p className="text-sm font-bold text-[#343434]">
-                <span className="bg-red-600 text-white rounded-sm px-1 text-xs mr-1">
-                  必須
-                </span>
-                パスワード
-                <br />
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(確認)
-              </p>
-            </div>
-            <div className="w-3/4 p-4">
-              <Input
-                type="password"
-                className="w-full h-10"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-              />
-            </div>
-          </div>
-        </div>
-        <div className="flex justify-end">
-          <Button
-            className="text-white text-sm bg-[#FF2A3B] px-8 py-4 rounded-lg"
-            onClick={handleAdd}
-          >
-            登録
-          </Button>
-        </div>
+        </form>
       </Modal>
     </>
   );
