@@ -39,23 +39,18 @@ const LinkRequirement = () => {
       <p className="text-sm text-[#343434] mt-2">HTMLソース</p>
       <div className="bg-slate-200 p-4 rounded-lg mt-2">
         <p className="text-sm text-[#343434]">
-          {`<Link target="_blank" to="https://jobjob-jp.com/">
+          {`<a target="_blank" to="https://jobjob-jp.com/">
             <img
               alt="日本最大級の医療・介護・保育の求人サイト ジョブジョブ"
               src="/assets/images/linkrequirement/linkrequirement_1.png"
             />
-          </Link>`}
+          </a>`}
         </p>
       </div>
       <button
         onClick={() =>
           clipboardButton(
-            `<Link target="_blank" to="https://jobjob-jp.com/">
-              <img
-                alt="日本最大級の医療・介護・保育の求人サイト ジョブジョブ"
-                src="/assets/images/linkrequirement/linkrequirement_1.png"
-              />
-            </Link>`
+            `<a target="_blank" to="https://jobjob-jp.com/"><img alt="日本最大級の医療・介護・保育の求人サイト ジョブジョブ" src="/assets/images/linkrequirement/linkrequirement_1.png"/></a>`
           )
         }
         className="bg-[#e9e9e9] hover:shadow-xl text-center font-bold lg:text-sm text-xs duration-500 text-[#188CE0] hover:text-[#343434] lg:px-12 md:px-8 px-4 lg:py-4 md:py-2 py-1 rounded-lg my-6"
@@ -71,18 +66,13 @@ const LinkRequirement = () => {
       <p className="text-sm text-[#343434] mt-2">HTMLソース</p>
       <div className="bg-slate-200 p-4 rounded-lg mt-2">
         <p className="text-sm text-[#343434]">
-          {`<Link target="_blank" to="https://jobjob-jp.com/"><img alt="日本最大級の医療・介護・保育の求人サイト ジョブジョブ" src="/assets/images/linkrequirement/linkrequirement_2.png" /></Link>`}
+          {`<a target="_blank" to="https://jobjob-jp.com/"><img alt="日本最大級の医療・介護・保育の求人サイト ジョブジョブ" src="/assets/images/linkrequirement/linkrequirement_2.png" /></a>`}
         </p>
       </div>
       <button
         onClick={() =>
           clipboardButton(
-            `<Link target="_blank" to="https://jobjob-jp.com/">
-              <img
-                alt="日本最大級の医療・介護・保育の求人サイト ジョブジョブ"
-                src="/assets/images/linkrequirement/linkrequirement_2.png"
-              />
-            </Link>`
+            `<a target="_blank" to="https://jobjob-jp.com/"><img alt="日本最大級の医療・介護・保育の求人サイト ジョブジョブ" src="/assets/images/linkrequirement/linkrequirement_2.png"/></a>`
           )
         }
         className="bg-[#e9e9e9] hover:shadow-xl text-center font-bold lg:text-sm text-xs duration-500 text-[#188CE0] hover:text-[#343434] lg:px-12 md:px-8 px-4 lg:py-4 md:py-2 py-1 rounded-lg my-6"
@@ -99,7 +89,7 @@ const LinkRequirement = () => {
       <p className="text-sm text-[#343434] mt-2">HTMLソース</p>
       <div className="bg-slate-200 p-4 rounded-lg mt-2">
         <p className="text-sm text-[#343434]">
-          {`<Link target="_blank" to="https://jobjob-jp.com/">医療・介護・保育の求人サイト ジョブジョブ</Link>に掲載中`}
+          {`<a target="_blank" to="https://jobjob-jp.com/">医療・介護・保育の求人サイト ジョブジョブ</a>に掲載中`}
         </p>
       </div>
       <button
