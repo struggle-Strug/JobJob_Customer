@@ -30,9 +30,6 @@ const MemberDetailModal = ({ open, onCancel, memberData }) => {
                   <span className="lg:text-sm md:text-xs text-xs font-bold text-[#343434]">
                     氏名
                   </span>
-                  <span className="lg:text-[0.55rem] md:text-[0.5rem] text-center text-[#FF2A3B] px-1 py-0.5 border-[1.5px] border-[#FF2A3B] bg-red-100 rounded-lg">
-                    非公開
-                  </span>
                 </div>
                 <div className="flex items-center justify-start w-2/3">
                   <p className="lg:text-[1rem] md:text-[0.8rem] text-sm text-[#343434] lg:pl-10 md:pl-6 pl-2">
@@ -44,9 +41,6 @@ const MemberDetailModal = ({ open, onCancel, memberData }) => {
                 <div className="flex items-center justify-start gap-2 w-1/3">
                   <span className="lg:text-sm md:text-xs text-xs font-bold text-[#343434]">
                     ふりがな
-                  </span>
-                  <span className="lg:text-[0.55rem] md:text-[0.5rem] text-center text-[#FF2A3B] px-1 py-0.5 border-[1.5px] border-[#FF2A3B] bg-red-100 rounded-lg">
-                    非公開
                   </span>
                 </div>
                 <div className="flex items-center justify-start w-2/3">
@@ -60,9 +54,6 @@ const MemberDetailModal = ({ open, onCancel, memberData }) => {
                   <span className="lg:text-sm md:text-xs text-xs font-bold text-[#343434]">
                     生年月日
                   </span>
-                  <span className="lg:text-[0.55rem] md:text-[0.5rem] text-center text-[#FF2A3B] px-1 py-0.5 border-[1.5px] border-[#FF2A3B] bg-red-100 rounded-lg">
-                    非公開
-                  </span>
                 </div>
                 <div className="flex items-center justify-start w-2/3">
                   <p className="lg:text-[1rem] md:text-[0.8rem] text-sm text-[#343434] lg:pl-10 md:pl-6 pl-2">
@@ -74,9 +65,6 @@ const MemberDetailModal = ({ open, onCancel, memberData }) => {
                 <div className="flex items-center justify-start gap-2 w-1/3">
                   <span className="lg:text-sm md:text-xs text-xs font-bold text-[#343434]">
                     年齢
-                  </span>
-                  <span className="lg:text-[0.55rem] md:text-[0.5rem] text-center text-[#FF2A3B] px-1 py-0.5 border-[1.5px] border-[#FF2A3B] bg-red-100 rounded-lg">
-                    非公開
                   </span>
                 </div>
                 <div className="flex items-center justify-start w-2/3">
@@ -112,9 +100,6 @@ const MemberDetailModal = ({ open, onCancel, memberData }) => {
                   <span className="lg:text-sm md:text-xs text-xs font-bold text-[#343434]">
                     電話番号
                   </span>
-                  <span className="lg:text-[0.55rem] md:text-[0.5rem] text-center text-[#FF2A3B] px-1 py-0.5 border-[1.5px] border-[#FF2A3B] bg-red-100 rounded-lg">
-                    非公開
-                  </span>
                 </div>
                 <div className="flex items-center justify-start w-2/3">
                   <p className="lg:text-[1rem] md:text-[0.8rem] text-sm text-[#343434] lg:pl-10 md:pl-6 pl-2">
@@ -126,9 +111,6 @@ const MemberDetailModal = ({ open, onCancel, memberData }) => {
                 <div className="flex items-center justify-start gap-2 w-1/3">
                   <span className="lg:text-sm md:text-xs text-xs font-bold text-[#343434]">
                     メールアドレス
-                  </span>
-                  <span className="lg:text-[0.55rem] md:text-[0.5rem] text-center text-[#FF2A3B] px-1 py-0.5 border-[1.5px] border-[#FF2A3B] bg-red-100 rounded-lg">
-                    非公開
                   </span>
                 </div>
                 <div className="flex items-center justify-start w-2/3">
