@@ -148,13 +148,13 @@ const ProcessDetail = ({
           <div className="flex flex-col gap-2 items-start h-full max-w-40">
             <div className="flex justify-start gap-4 w-full">
               <p
-                className="text-sm font-bold truncate max-w-[120px]"
+                className="text-sm font-bold whitespace-normal break-words max-w-[120px]"
                 title={record.user?.name}
               >
                 {record.user?.name}
               </p>
               <p
-                className="text-sm truncate max-w-[80px]"
+                className="text-sm whitespace-normal break-words max-w-[80px]"
                 title={record.user?.hiraganaName}
               >
                 {record.user?.hiraganaName}
