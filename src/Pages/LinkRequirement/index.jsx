@@ -95,7 +95,7 @@ const LinkRequirement = () => {
       <button
         onClick={() =>
           clipboardButton(
-            `<Link target="_blank" to="https://jobjob-jp.com/">医療・介護・保育の求人サイト ジョブジョブ</Link>に掲載中`
+            `<a target="_blank" to="https://jobjob-jp.com/">医療・介護・保育の求人サイト ジョブジョブ</a>に掲載中`
           )
         }
         className="bg-[#e9e9e9] hover:shadow-xl text-center font-bold lg:text-sm text-xs duration-500 text-[#188CE0] hover:text-[#343434] lg:px-12 md:px-8 px-4 lg:py-4 md:py-2 py-1 rounded-lg my-6"
