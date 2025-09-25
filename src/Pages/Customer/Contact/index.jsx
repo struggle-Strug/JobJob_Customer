@@ -292,6 +292,7 @@ const Contact = () => {
                   </button>
                   <Link
                     to={"/customers/rule"}
+                    target="_blank"
                     className="text-blue-600 text-sm hover:text-red-600 duration-200 p-3"
                   >
                     利用規約はこちら
