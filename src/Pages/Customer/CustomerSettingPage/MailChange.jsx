@@ -21,9 +21,7 @@ const MailChange = () => {
     );
     if (response.data.error) return toast.error(response.data.message);
     if (response.data.isAuthError) return;
-    localStorage.removeItem("token");
     toast.success("メールアドレスを変更しました。");
-    navigate("/customers/sign_in");
   };
 
   return (
