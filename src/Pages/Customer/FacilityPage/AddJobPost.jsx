@@ -77,20 +77,7 @@ const AddJobPost = () => {
     useState("");
   const [jobPostQualificationWelcome, setJobPostQualificationWelcome] =
     useState("");
-  const [jobPostProcess, setJobPostProcess] = useState(`
-        1：応募フォームよりご応募ください
-        ↓
-        2：採用担当より面接日程の調整などの連絡をさせていただきます
-        ↓
-        3：面接実施
-        ↓
-        4：採用決定のご連絡
-        ↓
-        5：入職手続きを進めます
-
-        ※応募から内定までは平均1週間～1か月ほどになります。
-        ※在職中で今すぐ転職が難しい方も調整のご相談が可能です。
-    `);
+  const [jobPostProcess, setJobPostProcess] = useState();
 
   const [previewImage, setPreviewImage] = useState("");
   const [previewOpen, setPreviewOpen] = useState(false);
