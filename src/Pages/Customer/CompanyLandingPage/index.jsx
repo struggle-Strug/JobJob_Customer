@@ -2,21 +2,33 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../../context/AuthContext.jsx";
 import { useEffect } from "react";
+import { Helmet } from "react-helmet";
 
 const CompanyLandingPage = () => {
   const { customerUser } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
-    document.title =
-      "完全無料！求人掲載・採用・募集について | JobJob (ジョブジョブ)";
     if (customerUser) {
       navigate("/customers");
     }
     //window.scrollTo({ top: 0, behavior: "smooth" });
   }, [customerUser]);
+
+  const metadata = {
+    title: "完全無料！求人掲載・採用・募集について | JobJob (ジョブジョブ)",
+    description: "求人掲載から採用まで完全無料！日本最大級の医療・介護・保育・美容の求人サイトJobJob(ジョブジョブ)は掲載時、採用後と全て無料！初期費用や掲載料、応募や採用決定ごとの成果報酬も発生しません。",
+    keywords: "無料,医療,介護,求人,転職,募集,パート,アルバイト,バイト,看護師,医師,薬剤師",
+    canonical: `${process.env.NEXT_PUBLIC_BASE_URL}/customers`,
+  };
   return (
     <>
+      <Helmet>
+        <title>{metadata.title}</title>
+        <meta name="description" content={metadata.description} />
+        <meta name="keywords" content={metadata.keywords} />
+        <link rel="canonical" href={metadata.canonical} />
+      </Helmet>
       <section className="bg-[#F1F1F1] w-full md:h-8 2xs:h-4 px-4">
         <p className="max-w-[1200px] mx-auto lg:text-base md:text-md text-sm 2sx:text-[0.5rem]">
           求人掲載・採用が完全無料 医療・歯科・介護・保育・美容 総合求人サイト
