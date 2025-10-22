@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Helmet } from "react-helmet";
 
 const LinkRequirement = () => {
   const [copied, setCopied] = useState(false);
@@ -22,7 +23,7 @@ const LinkRequirement = () => {
   };
   return (
     <>
-    <Helmet>
+      <Helmet>
         <title>{metadata.title}</title>
         <meta name="description" content={metadata.description} />
         <meta name="keywords" content={metadata.keywords} />
