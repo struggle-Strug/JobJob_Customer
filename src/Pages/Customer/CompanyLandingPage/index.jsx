@@ -19,7 +19,7 @@ const CompanyLandingPage = () => {
     title: "完全無料！求人掲載・採用・募集について | JobJob (ジョブジョブ)",
     description: "求人掲載から採用まで完全無料！日本最大級の医療・介護・保育・美容の求人サイトJobJob(ジョブジョブ)は掲載時、採用後と全て無料！初期費用や掲載料、応募や採用決定ごとの成果報酬も発生しません。",
     keywords: "無料,医療,介護,求人,転職,募集,パート,アルバイト,バイト,看護師,医師,薬剤師",
-    canonical: `${process.env.NEXT_PUBLIC_BASE_URL}/customers`,
+    canonical: `${import.meta.env.VITE_APP_BASE_URL}`,
   };
   return (
     <>
