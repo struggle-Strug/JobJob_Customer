@@ -73,7 +73,7 @@ const MessageDetails = ({ id, onMessageSent, onMessageRead }) => {
     if (onMessageSent) {
       onMessageSent();
     }
-    toast.success("メッセージを更新しました");
+    toast.success("メッセージを更新しました", { duration: 5000 });
   };
 
   const markMessageAsRead = async (messageToMark) => {
@@ -136,7 +136,7 @@ const MessageDetails = ({ id, onMessageSent, onMessageRead }) => {
           },
         }
       );
-      toast.success("ファイルアップロード成功!");
+      toast.success("ファイルアップロード成功!", { duration: 5000 });
       return response.data.files;
     } catch (error) {
       toast.error("ファイルアップロードに失敗しました");
@@ -172,7 +172,7 @@ const MessageDetails = ({ id, onMessageSent, onMessageRead }) => {
         return;
       }
 
-      toast.success("メッセージを送信しました");
+      toast.success("メッセージを送信しました", { duration: 5000 });
       setFileList([]);
       setContent("");
 

@@ -87,7 +87,7 @@ const ProcessDetail = ({
         }
         if (response.data.isAuthError) return;
 
-        toast.success("ステータスを変更しました。");
+        toast.success("ステータスを変更しました。", { duration: 5000 });
         getProcessesByStatus();
         getJobNumbersByStatus(); // Add this line to update the job numbers
       } catch (error) {
@@ -127,7 +127,7 @@ const ProcessDetail = ({
         }
         if (response.data.isAuthError) return;
 
-        toast.success("メモを保存しました。");
+        toast.success("メモを保存しました。", { duration: 5000 });
         getProcessesByStatus();
       } catch (error) {
         toast.error("メモの保存に失敗しました。");

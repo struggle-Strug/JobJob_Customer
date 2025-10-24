@@ -140,7 +140,7 @@ const CoporateInformation = () => {
         );
         if (response.data.error) return toast.error(response.data.message);
         if (response.data.isAuthError) return;
-        toast.success("法人情報を更新しました。");
+        toast.success("法人情報を更新しました。", { duration: 5000 });
       } else {
         response = await axios.post(
           `${import.meta.env.VITE_APP_API_URL}/api/v1/company`,
@@ -148,7 +148,7 @@ const CoporateInformation = () => {
         );
         if (response.data.error) return toast.error(response.data.message);
         if (response.data.isAuthError) return;
-        toast.success("法人情報を登録しました。");
+        toast.success("法人情報を登録しました。", { duration: 5000 });
         setAlreadyRegistered(true);
       }
     } catch (err) {

@@ -42,7 +42,8 @@ const CustomerSignUp = () => {
     if (resData.data.error) return toast.error(resData.data.message);
     if (resData.data.isAuthError) return;
     toast.success(
-      "パスワードのご案内メールを送信しました。メールボックスをご確認ください。"
+      "パスワードのご案内メールを送信しました。メールボックスをご確認ください。",
+      { duration: 5000 }
     );
     navigate("/customers/sign_in");
   };

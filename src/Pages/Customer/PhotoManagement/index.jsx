@@ -38,7 +38,7 @@ const PhotoManagement = () => {
       }
 
       if (file.status === "done") {
-        toast.success(`${file.name} file uploaded successfully`);
+        toast.success(`${file.name} file uploaded successfully`, { duration: 5000 });
       } else if (file.status === "error") {
         toast.error(`${file.name} file upload failed.`);
         return false;
@@ -71,7 +71,7 @@ const PhotoManagement = () => {
         }
       );
       if (response.data.isAuthError) return;
-      toast.success("ファイルアップロード完了!");
+      toast.success("ファイルアップロード完了!", { duration: 5000 });
       return response.data.files; // Assuming API returns an array of URLs
     } catch (error) {
       toast.error("ファイルアップロードに失敗しました");
@@ -104,7 +104,7 @@ const PhotoManagement = () => {
       );
       if (response.error) return toast.error("画像の削除に失敗しました。");
       if (response.data.isAuthError) return;
-      toast.success("ファイル削除完了!");
+      toast.success("ファイル削除完了!", { duration: 5000 });
       setPhotos(response.data.photos?.images);
 
       const deleteResult = await handleDeleteImage(phototUrl);
@@ -157,7 +157,7 @@ const PhotoManagement = () => {
         { description: description }
       );
       if (response.data.error) return toast.error(response.data.message);
-      toast.success("説明文更新成功");
+      toast.success("説明文更新成功", { duration: 5000 });
       setDescription("");
       setDescriptionModalOpen(false);
       getPhotosByCustomerId();
