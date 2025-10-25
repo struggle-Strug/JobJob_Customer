@@ -33,7 +33,7 @@ const CustomerSignIn = () => {
     if (resData.data.error)
       return toast.error("メールアドレスまたはパスワードが間違えています 。");
     localStorage.setItem("token", resData.data.token);
-    toast.success(resData.data.message);
+    toast.success(resData.data.message, { duration: 5000 });
     setCustomer(resData.data.customer);
     setCustomerUser(resData.data.user);
     navigate("/customers");

@@ -84,7 +84,7 @@ const CoporateManagement = () => {
     );
     if (response.data.error) return toast.error(response.data.message);
     if (response.data.isAuthError) return;
-    toast.success("ユーザー追加完了");
+    toast.success("ユーザー追加完了", { duration: 5000 });
     setAddUserModal(false);
     getUsers();
   };
@@ -95,7 +95,7 @@ const CoporateManagement = () => {
     );
     if (response.data.error) return toast.error(response.data.message);
     if (response.data.isAuthError) return;
-    toast.success("ユーザー削除完了");
+    toast.success("ユーザー削除完了", { duration: 5000 });
     getUsers();
   };
 
