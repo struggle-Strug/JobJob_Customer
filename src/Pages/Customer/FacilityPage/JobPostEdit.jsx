@@ -400,7 +400,7 @@ const JobPostEdit = () => {
             },
           }
         );
-        //toast.success("写真のアップロードが完了しました");
+        //toast.success("写真のアップロードが完了しました", { duration: 5000 });
         uploadedFileUrls = response.data.files.map((item) => item.fileUrl);
         uploadedFiles = response.data.files;
       } catch (error) {
@@ -620,7 +620,7 @@ const JobPostEdit = () => {
         JobPostData
       );
       if (response.data.error) toast.error(response.data.error);
-      //else toast.success("求人を更新しました");
+      //else toast.success("求人を更新しました", { duration: 5000 });
       //navigate("/customers/facility");
     } catch (error) {
       console.error("Error updating job post:", error);
@@ -647,7 +647,7 @@ const JobPostEdit = () => {
       }
 
       if (status === "ended") {
-        //toast.success("求人を終了しました");
+        //toast.success("求人を終了しました", { duration: 5000 });
         //navigate("/customers/facility");
         setEndModal(false);
         setEnd2Modal(true);
@@ -666,7 +666,7 @@ const JobPostEdit = () => {
         `${import.meta.env.VITE_APP_API_URL}/api/v1/jobpost/${jobPostId}`
       );
       if (response.data.error) toast.error(response.data.error);
-      //toast.success("求人を削除しました");
+      //toast.success("求人を削除しました", { duration: 5000 });
       //navigate("/customers/facility");
       setDeleteModal(false);
       setDelete2Modal(true);

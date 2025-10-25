@@ -21,7 +21,7 @@ const MailChange = () => {
     );
     if (response.data.error) return toast.error(response.data.message);
     if (response.data.isAuthError) return;
-    toast.success("メールアドレスを変更しました。");
+    toast.success("メールアドレスを変更しました。", { duration: 5000 });
   };
 
   return (

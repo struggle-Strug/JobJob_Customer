@@ -238,7 +238,7 @@ const FacilityAdd = () => {
           uploadedFiles = [...uploadedFiles, ...response.data.files];
         }
 
-        //toast.success("ファイルのアップロードに完了しました");
+        //toast.success("ファイルのアップロードに完了しました", { duration: 5000 });
       } catch (error) {
         console.error("Upload error:", error);
         toast.error(
@@ -315,7 +315,7 @@ const FacilityAdd = () => {
         facilityData
       );
       if (response.data.error) toast.error(response.data.error);
-      //toast.success(response.data.message);
+      //toast.success(response.data.message, { duration: 5000 });
       //navigate(`/customers/facility`);
       setSuccessModal(true);
     } catch (error) {

@@ -29,7 +29,7 @@ const PasswordChange = () => {
     if (resData.data.error || resData.data.isAuthError) {
       toast.error(resData.data.message);
     } else {
-      toast.success(resData.data.message);
+      toast.success(resData.data.message, { duration: 5000 });
     }
   };
 

@@ -160,7 +160,7 @@ const FacilityDetail = ({ facility, jobPosts, setJobPosts }) => {
         return;
       }
 
-      toast.success("求人をコピーしました");
+      toast.success("求人をコピーしました", { duration: 5000 });
       setCopyJobPost(false);
       setSelectedCompanyFacility("");
       setSelectedJobPostId("");

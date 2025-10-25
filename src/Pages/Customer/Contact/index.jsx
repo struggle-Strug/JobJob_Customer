@@ -92,7 +92,7 @@ const Contact = () => {
       );
       if (response.data.error) return toast.error(response.data.message);
       if (response.data.isAuthError) return;
-      toast.success("お問い合わせありがとうございました。\n返信までしばらくお待ちください。");
+      toast.success("お問い合わせありがとうございました。\n返信までしばらくお待ちください。", { duration: 5000 });
       navigate("/");
     } catch (err) {
       console.error(err);

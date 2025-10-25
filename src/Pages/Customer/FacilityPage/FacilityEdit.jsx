@@ -260,7 +260,7 @@ const FacilityEdit = () => {
           uploadedFiles = [...uploadedFiles, ...response.data.files];
         }
 
-        //toast.success("ファイルのアップロードに完了しました");
+        //toast.success("ファイルのアップロードに完了しました", { duration: 5000 });
       } catch (error) {
         console.error("Upload error:", error);
         toast.error(
@@ -401,7 +401,7 @@ const FacilityEdit = () => {
             uploadedFiles = [...uploadedFiles, ...response.data.files];
           }
 
-          //toast.success("ファイルのアップロードに完了しました");
+          //toast.success("ファイルのアップロードに完了しました", { duration: 5000 });
         } catch (error) {
           console.error("Upload error:", error);
           toast.error(
@@ -459,7 +459,7 @@ const FacilityEdit = () => {
         return toast.error(response.data.error);
       }
       if (response.data.isAuthError) return;
-      //toast.success(response.data.message);
+      //toast.success(response.data.message, { duration: 5000 });
       setSuccessModal(true);
     } catch (error) {
       console.error("Facility save error:", error);
@@ -493,7 +493,7 @@ const FacilityEdit = () => {
       );
       if (response.data.error) return message.error(response.data.error);
       if (response.data.isAuthError) return;
-      //toast.success("削除成功");
+      //toast.success("削除成功", { duration: 5000 });
       setDeleteModal(false);
       setDelete2Modal(true);
     } catch (error) {
