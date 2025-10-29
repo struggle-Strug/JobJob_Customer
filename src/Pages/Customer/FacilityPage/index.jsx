@@ -200,7 +200,7 @@ const FacilityPage = () => {
                         <img
                           src={facility?.photos[0].url || "/assets/images/noimage.png"}
                           alt={facility?.name}
-                          className={`w-full h-full object-${
+                          className={`w-full h-full aspect-video object-${
                             75 / 42 <
                             facility?.photos[0].width /
                               facility?.photos[0].height
@@ -215,7 +215,7 @@ const FacilityPage = () => {
                         <img
                           src="/assets/images/noimage.png"
                           alt={facility?.name}
-                          className="w-full h-full object-cover"
+                          className="w-full h-full aspect-video"
                         />
                       )}
                     </div>
@@ -264,7 +264,7 @@ const FacilityPage = () => {
                 <img
                   src="/assets/images/noimage.png"
                   alt="No facility selected"
-                  className="w-32 h-32 object-contain opacity-30 mb-4"
+                  className="w-32 h-32 aspect-video opacity-30 mb-4"
                 />
                 <p className="text-lg font-bold text-gray-400 mb-2">
                   施設を選択してください

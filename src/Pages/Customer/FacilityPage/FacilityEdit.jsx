@@ -929,7 +929,7 @@ const FacilityEdit = () => {
                         <img
                           src="/assets/images/noimage.png"
                           alt="no-image"
-                          className="w-full aspect-video object-cover"
+                          className="w-full aspect-video"
                         />
                       </div>
                     )}
@@ -1178,6 +1178,7 @@ const FacilityEdit = () => {
           src={previewImage || "/placeholder.svg"}
           alt="enlarged"
           style={{ width: "100%" }}
+          className="aspect-video"
         />
       </Modal>
       <PhotoSelectModal
