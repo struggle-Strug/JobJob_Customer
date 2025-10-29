@@ -685,6 +685,7 @@ const FacilityAdd = () => {
             src={previewImage || "/placeholder.svg"}
             alt="enlarged"
             style={{ width: "100%" }}
+            className="aspect-video"
           />
         </Modal>
         {/* Image Edit Modal - still needed for direct processing */}

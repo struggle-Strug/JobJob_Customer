@@ -41,7 +41,7 @@ const JobPostPreview = ({ open, onCancel, data }) => {
                 key={index}
                 src={photo.url}
                 alt="jobPostPhoto"
-                className={`w-20 flex-shrink-0 object-${(80/80 < photo.photoWidth / photo.photoHeight) ? "cover" : "contain"}`}
+                className={`w-20 flex-shrink-0 aspect-video object-${(80/80 < photo.photoWidth / photo.photoHeight) ? "cover" : "contain"}`}
               />
             ))}
           </div>
