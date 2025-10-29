@@ -1106,6 +1106,7 @@ const AddJobPost = () => {
           src={previewImage || "/placeholder.svg"}
           alt="enlarged"
           style={{ width: "100%" }}
+          className="aspect-video"
         />
       </Modal>
 

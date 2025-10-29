@@ -227,7 +227,7 @@ const FacilityDetail = ({ facility, jobPosts, setJobPosts }) => {
         <img
           src="/assets/images/noimage.png"
           alt="No image"
-          className="w-full h-32 object-cover rounded-lg"
+          className="w-full h-32 aspect-video rounded-lg"
           onError={(e) => {
             e.target.src = "/assets/images/noimage.png";
           }}
@@ -238,7 +238,7 @@ const FacilityDetail = ({ facility, jobPosts, setJobPosts }) => {
       <img
         src="/assets/images/noimage.png"
         alt={facility.name}
-        className="w-full h-32 object-cover rounded-lg"
+        className="w-full h-32 aspect-video rounded-lg"
         onError={(e) => {
           e.target.src = "/assets/images/noimage.png";
         }}
@@ -247,7 +247,7 @@ const FacilityDetail = ({ facility, jobPosts, setJobPosts }) => {
       <img
         src={facility.photos[0].url || "/placeholder.svg"}
         alt={facility.name}
-        className={`w-full h-32 object-${
+        className={`w-full h-32 aspect-video object-${
           156 / 128 < facility.photos[0].width / facility.photos[0].height
             ? "cover"
             : "contain"
@@ -265,7 +265,7 @@ const FacilityDetail = ({ facility, jobPosts, setJobPosts }) => {
         <img
           src="/assets/images/noimage.png"
           alt="No image"
-          className="w-full h-24 object-cover rounded-lg"
+          className="w-full h-24 aspect-video rounded-lg"
         />
       );
 
@@ -273,13 +273,13 @@ const FacilityDetail = ({ facility, jobPosts, setJobPosts }) => {
       <img
         src="/assets/images/noimage.png"
         alt={`${jobPost?.facility?.name || ""}の${jobPost?.type || ""}求人(${jobPost?.employment_type || ""})`}
-        className="w-full h-24 object-cover rounded-lg"
+        className="w-full h-24 aspect-video rounded-lg"
       />
     ) : (
       <img
         src={jobPost?.photos[0].url || "/placeholder.svg"}
         alt={`${jobPost?.facility?.name || ""}の${jobPost?.type || ""}求人(${jobPost?.employment_type || ""})の写真1枚目${(jobPost?.photos[0].description) ? ("：" + jobPost?.photos[0].description) : ""}`}
-        className={`w-full h-24 object-${
+        className={`w-full h-24 aspect-video object-${
           93 / 96 < jobPost.photos[0].width / jobPost.photos[0].height
             ? "cover"
             : "contain"
