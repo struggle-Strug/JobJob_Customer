@@ -292,7 +292,7 @@ const JobPostEdit = () => {
 
         // Set output dimensions with 4:3 aspect ratio
         const outputHeight = 768;
-        const outputWidth = Math.round(outputHeight * (4 / 3)); // 1024 for 4:3 ratio
+        const outputWidth = Math.round(outputHeight * (16 / 9)); // 1024 for 4:3 ratio
 
         // Set canvas to the output dimensions
         canvas.width = outputWidth;

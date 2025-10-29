@@ -36,7 +36,7 @@ const FacilityPreview = ({ open, onCancel, data }) => {
                         <img
                           src={photo.url}
                           alt={`facility-photo-${index}`}
-                          className={`w-full aspect-video object-${(640/360 < photo.width / photo.height) ? "cover" : "contain"} rounded-t-xl`}
+                          className={`w-full aspect-video object-cover rounded-t-xl`}
                         />
                       </div>
                     ))
