@@ -355,31 +355,31 @@ const FacilityAdd = () => {
         img.onload = () => {
           const canvas = document.createElement("canvas");
           const ctx = canvas.getContext("2d");
-
-          // Set maximum dimensions
-          const MAX_WIDTH = 1200;
-          const MAX_HEIGHT = 1200;
-
-          let width = img.width;
-          let height = img.height;
-
-          // Calculate new dimensions while maintaining aspect ratio
-          if (width > height) {
-            if (width > MAX_WIDTH) {
-              height *= MAX_WIDTH / width;
-              width = MAX_WIDTH;
-            }
-          } else {
-            if (height > MAX_HEIGHT) {
-              width *= MAX_HEIGHT / height;
-              height = MAX_HEIGHT;
-            }
-          }
+          const outputHeight = 768;
+          const outputWidth = Math.round(outputHeight * (16 / 9)); // 1024 for 4:3 ratio
 
           // Set canvas dimensions and draw the resized image
-          canvas.width = width;
-          canvas.height = height;
-          ctx.drawImage(img, 0, 0, width, height);
+          canvas.width = outputWidth;
+          canvas.height = outputHeight;
+          ctx.fillStyle = "#FFFFFF";
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+          // Calculate dimensions to fit by height
+          const scale = outputHeight / img.height;
+          const scaledWidth = img.width * scale;
+
+          // Calculate x-offset for centering (with cropping or padding as needed)
+          let xOffset = 0;
+          if (scaledWidth > outputWidth) {
+            // Image is too wide after scaling to height - crop the sides
+            xOffset = (outputWidth - scaledWidth) / 2; // This will be negative, cropping both sides equally
+          } else {
+            // Image is narrower than output after scaling to height - center it with padding
+            xOffset = (outputWidth - scaledWidth) / 2; // This will be positive, adding padding
+          }
+
+          // Draw the image centered (or cropped) horizontally, full height
+          ctx.drawImage(img, xOffset, 0, scaledWidth, outputHeight);
 
           // Get the compressed image as base64
           const compressedBase64 = canvas.toDataURL("image/jpeg", 0.8);
