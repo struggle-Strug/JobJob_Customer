@@ -3,6 +3,9 @@ export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      fontFamily: {
+        noto: ['"Noto Sans JP"', 'sans-serif'],
+      },
       screens: {
         "2sx": "375px",
         sx: "425px",
