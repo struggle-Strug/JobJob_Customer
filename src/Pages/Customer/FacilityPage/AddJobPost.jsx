@@ -1274,6 +1274,16 @@ const AddJobPost = () => {
                   </div>
                 </div>
 
+                {/* 想定年収 */}
+                <div className="flex items-start justify-start border-b border-[#e7e7e7]">
+                  <p className="mr-1 lg:text-sm text-sm font-bold text-[#343434] py-6 w-1/5 font-noto">
+                    想定年収
+                  </p>
+                  <div className="lg:text-sm text-sm text-[#343434] py-6 w-4/5 overflow-auto font-noto">
+                    <pre className="whitespace-pre-wrap break-words font-noto">{jobPostExpectedIncome || ''}</pre>
+                  </div>
+                </div>
+
                 {/* 待遇 */}
                 <div className="flex items-start justify-start border-b border-[#e7e7e7]">
                   <p className="mr-1 lg:text-sm text-sm font-bold text-[#343434] py-6 w-1/5 font-noto">
