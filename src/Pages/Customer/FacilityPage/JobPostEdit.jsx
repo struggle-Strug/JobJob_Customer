@@ -531,9 +531,7 @@ const JobPostEdit = () => {
         return toast.error("訴求文タイトルを入力してください。");
       if (jobPostSubDescription === "")
         return toast.error("訴求文を入力してください。");
-      if (jobPostWorkItem.length === 0)
-        return toast.error("仕事内容を選択してください。");
-      if (jobPostWorkContent === "")
+      if (jobPostWorkItem.length === 0 && jobPostWorkContent === "")
         return toast.error("仕事内容を入力してください。");
       if (jobPostEmploymentType.length === 0)
         return toast.error("雇用形態を選択してください。");
