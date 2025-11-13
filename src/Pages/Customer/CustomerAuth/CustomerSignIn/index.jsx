@@ -127,7 +127,7 @@ const CustomerSignIn = () => {
           </div>
           <div className="flex items-center justify-center px-8 py-4">
             <Link
-              to={"/members/sign_in"}
+              to={`${import.meta.env.VITE_APP_FRONTEND_URL}/members/sign_in`}
               className="bg-blue-600 hover:bg-blue-200 text-white hover:text-blue-500 rounded-sm lg:text-lg md:text-base text-sm lg:px-12 md:px-8 px-4 py-2 duration-300"
             >
               求職者ログイン

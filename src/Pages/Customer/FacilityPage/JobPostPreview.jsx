@@ -155,6 +155,26 @@ const JobPostPreview = ({ open, onCancel, data }) => {
                 </p>
               </div>
 
+              {/* 給与の備考 */}
+              <div className="flex items-start justify-start border-b border-[#e7e7e7]">
+                <p className="mr-1 lg:text-sm text-sm font-bold text-[#343434] py-6 w-1/5 font-noto">
+                  給与の備考
+                </p>
+                <div className="lg:text-sm text-sm text-[#343434] py-6 w-4/5 overflow-auto font-noto">
+                  <pre className="whitespace-pre-wrap break-words font-noto">{data?.salary_remarks || ''}</pre>
+                </div>
+              </div>
+
+              {/* 想定年収 */}
+              <div className="flex items-start justify-start border-b border-[#e7e7e7]">
+                <p className="mr-1 lg:text-sm text-sm font-bold text-[#343434] py-6 w-1/5 font-noto">
+                  想定年収
+                </p>
+                <div className="lg:text-sm text-sm text-[#343434] py-6 w-4/5 overflow-auto font-noto">
+                  <pre className="whitespace-pre-wrap break-words font-noto">{data?.expected_income || ''}</pre>
+                </div>
+              </div>
+
               {/* 待遇 */}
               <div className="flex items-start justify-start border-b border-[#e7e7e7]">
                 <p className="mr-1 lg:text-sm text-sm font-bold text-[#343434] py-6 w-1/5 font-noto">
@@ -171,6 +191,30 @@ const JobPostPreview = ({ open, onCancel, data }) => {
                   <div className="lg:text-sm text-sm text-[#343434] mt-4 overflow-auto font-noto">
                     <pre className="whitespace-pre-wrap break-words font-noto">{data?.treatment_content || ''}</pre>
                   </div>
+                </div>
+              </div>
+
+              {/* 長期休暇・特別休暇 */}
+              <div className="flex items-start justify-start border-b border-[#e7e7e7]">
+                <p className="mr-1 lg:text-sm text-sm font-bold text-[#343434] py-6 w-1/5 font-noto">
+                  長期休暇・特別休暇
+                </p>
+                <div className="lg:text-sm text-sm text-[#343434] py-6 w-4/5 overflow-auto font-noto">
+                  <pre className="whitespace-pre-wrap break-words font-noto">{data?.special_content || ''}</pre>
+                </div>
+              </div>
+
+              {/* 教育体制・研修 */}
+              <div className="flex items-start justify-start border-b border-[#e7e7e7]">
+                <p className="mr-1 lg:text-sm text-sm font-bold text-[#343434] py-6 w-1/5 font-noto">
+                  教育体制・研修
+                </p>
+                <div className="inline-block items-start justify-start gap-2 w-4/5 py-6">
+                  {(Array.isArray(data?.education_content) ? data.education_content : []).filter(v => v).map((item, index) => (
+                    <div key={index} className="mr-1 inline-block text-center bg-[#F5BD2E] text-white px-2 py-0.5 rounded-xs font-noto">
+                      <p className="text-[10px] font-bold font-noto m-0 leading-tight">{item}</p>
+                    </div>
+                  ))}
                 </div>
               </div>
 

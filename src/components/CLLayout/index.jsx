@@ -21,9 +21,6 @@ const CLLayout = () => {
               {customer?.email ? customer?.email : customerUser?.email}
             </p>
           </div>
-          <Link to={"#"} className="lg:text-base text-sm font-bold">
-            ヘルプ
-          </Link>
         </div>
       </header>
 
