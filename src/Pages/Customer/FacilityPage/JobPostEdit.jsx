@@ -830,7 +830,7 @@ const JobPostEdit = () => {
         </div>
         <div className="flex items-start mt-4 desireEmployment">
           <p className="lg:text-sm text-xs w-1/5">
-            仕事内容（選択）
+            仕事内容
             <span className="text-[0.7rem] text-[#FF2A3B]">(必須)</span>
           </p>
           <Checkbox.Group
@@ -843,9 +843,7 @@ const JobPostEdit = () => {
           />
         </div>
         <div className="flex items-start mt-4 textarea">
-          <p className="lg:text-sm text-xs w-1/5">
-            仕事内容<span className="text-[0.7rem] text-[#FF2A3B]">(必須)</span>
-          </p>
+          <p className="lg:text-sm text-xs w-1/5"></p>
           <TextArea
             value={jobPostWorkContent}
             onChange={(e) => setJobPostWorkContent(e.target.value)}
